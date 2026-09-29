@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Sea bake</title>
+<!--
+  Offline renderer for the page background (assets/js/sea.js), used to bake still fallbacks and the OG image
+  with headless Chrome. Serve the repo first: node tools/serve.js 8080
+
+  Render one frame (960x540 by default, time fixed at t=4):
+    tools/bake.html?ramp=blue|deep|night|red&frame=1..6&t=4[&w=960&h=540][&grade=0|1][&caustics=0|1]
+  The page sets <html data-baked="1"> once the frame is on the canvas.
+
+  Headless example (PowerShell):
+    & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --use-angle=swiftshader `
+      --enable-unsafe-swiftshader --hide-scrollbars --window-size=960,540 --virtual-time-budget=5000 `
+      --screenshot="$PWD\still-blue.png" "http://127.0.0.1:8080/tools/bake.html?ramp=blue&frame=2"
+
+  Calibration: tools/bake.html?stats=1[&g4=.85&b4=0][&asp=1.6] prints, for each frame, the share of the 16:10 hero area that lands
+  in the white step (target 3-8%) and in the two bright blue steps (target 25-40%) with the current
+  luminance gain/bias from sea.js, plus the gain/bias that fits the targets best.
+-->
+<style>
+html,body{margin:0;background:#01023C}
+#sea{display:block}
+#stats{position:absolute;left:0;top:0;margin:0;padding:12px 16px;background:rgb(1 2 60 / .92);color:#E0FE9D;
+  font:13px/1.5 ui-monospace,Consolas,monospace;white-space:pre}
+</style>
+</head>
+<body>
+<canvas id="sea" aria-hidden="true"></canvas>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var num = function (k, d) { var v = parseFloat(q.get(k)); return isNaN(v) ? d : v; };
+  var b = window.SEA_BAKE = {
+    ramp: q.get('ramp') || 'deep', frame: Math.min(6, Math.max(1, Math.round(num('frame', 2)))), t: num('t', 4),
+    w: Math.round(num('w', 960)), h: Math.round(num('h', 540)), grade: num('grade', 1), caustics: num('caustics', 1)
+  };
+  var c = document.getElementById('sea');
+  c.style.width = b.w + 'px'; c.style.height = b.h + 'px';
+})();
+</script>
+<script src="../assets/js/sea.js"></script>
+<script>
+(async function () {
+  if (!/[?&]stats/.test(location.search)) return;
+  var out = document.createElement('pre'); out.id = 'stats'; document.body.append(out);
+  var q = new URLSearchParams(location.search), num = function (k, d) { var v = parseFloat(q.get(k)); return isNaN(v) ? d : v; };
+  var lum = (window.sea && window.sea.lum) || [], asp = num('asp', 1.6), rows = [], res = {};
+  // blurred luminance of the 16:10 cover crop: 1024x512 texture at mip ~3 is about 128x64
+  async function sample(n) {
+    var im = new Image(); im.src = '../assets/sea/image' + n + '-1024.jpg'; await im.decode();
+    var src = 1024 * Math.min(1, asp / (window.sea.asp ? window.sea.asp[n] : 1.78)), c = document.createElement('canvas');
+    c.width = 128; c.height = 64;
+    var x = c.getContext('2d', { willReadFrequently: true }); x.imageSmoothingQuality = 'high';
+    x.drawImage(im, (1024 - src) / 2, 0, src, 512, 0, 0, 128, 64);
+    var d = x.getImageData(0, 0, 128, 64).data, L = new Float32Array(d.length / 4);
+    for (var i = 0; i < L.length; i++) L[i] = (.299 * d[i * 4] + .587 * d[i * 4 + 1] + .114 * d[i * 4 + 2]) / 255;
+    return L;
+  }
+  function share(L, g, b) {
+    var w = 0, bl = 0;
+    for (var i = 0; i < L.length; i++) { var v = L[i] * g + b; if (v >= .81) w++; else if (v >= .48) bl++; }
+    return [w / L.length, bl / L.length];
+  }
+  var pct = function (v) { return (v * 100).toFixed(1).padStart(5) + '%'; };
+  rows.push('frame  gain  bias   white  blue    | best gain  bias   white  blue');
+  for (var n = 1; n <= 6; n++) {
+    var L = await sample(n), g0 = num('g' + n, lum[n] ? lum[n][0] : 1), b0 = num('b' + n, lum[n] ? lum[n][1] : 0), now = share(L, g0, b0), best = null;
+    for (var g = .5; g <= 3.001; g += .05) for (var bb = -.3; bb <= .401; bb += .01) {
+      var s = share(L, g, bb), e = Math.pow((s[0] - .055) / .025, 2) + Math.pow((s[1] - .325) / .075, 2) + Math.pow(g - 1, 2) * .5 + Math.pow(bb / .1, 2) * .5;
+      if (!best || e < best[0]) best = [e, g, bb, s[0], s[1]];
+    }
+    res[n] = { now: [g0, b0, now[0], now[1]], best: [+best[1].toFixed(2), +best[2].toFixed(2), best[3], best[4]] };
+    rows.push('  ' + n + '    ' + g0.toFixed(2) + '  ' + b0.toFixed(2).padStart(5) + '  ' + pct(now[0]) + ' ' + pct(now[1]) +
+      '  |      ' + best[1].toFixed(2) + '  ' + best[2].toFixed(2).padStart(5) + '  ' + pct(best[3]) + ' ' + pct(best[4]));
+  }
+  out.textContent = rows.join('\n');
+  window.SEA_STATS = res; console.log('sea stats ' + JSON.stringify(res));
+})();
+</script>
+</body>
+</html>

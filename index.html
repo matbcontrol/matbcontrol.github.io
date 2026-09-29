@@ -1,818 +1,551 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aleksandr Kartak — Unity Developer & Technical Artist</title>
-<meta name="description" content="Unity developer and technical artist, in game development since 2021: gameplay programming, systems architecture and technical art — custom shaders, VFX and rendering optimization in URP & HDRP." />
-<meta name="theme-color" content="#0a0a0b" />
-
-<!-- Open Graph / Twitter -->
-<meta property="og:title" content="Aleksandr Kartak — Unity Developer & Technical Artist" />
-<meta property="og:description" content="Gameplay programming, systems architecture and real-time visuals. Aura Farming is live on Steam (120+ reviews, Mostly Positive)." />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://matbcontrol.github.io/assets/work/image5.png" />
-<meta name="twitter:card" content="summary_large_image" />
-
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23b6ff43'/%3E%3Ctext x='16' y='23' font-family='Arial,sans-serif' font-size='20' font-weight='bold' text-anchor='middle' fill='%230a0a0b'%3EK%3C/text%3E%3C/svg%3E" />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-<style>
-/* ============ TOKENS ============ */
-:root{
-  --bg:#0a0a0b;
-  --bg-2:#0f0f11;
-  --surface:#141416;
-  --surface-2:#1a1a1d;
-  --border:rgba(255,255,255,.08);
-  --border-strong:rgba(255,255,255,.16);
-  --text:#f4f4f5;
-  --muted:#a1a1aa;
-  --faint:#71717a;
-
-  --accent:#b6ff43;        /* lime — grass */
-  --accent-2:#38d6ff;      /* cyan — water */
-  --accent-ink:#0a0a0b;    /* text on accent */
-
-  --maxw:1160px;
-  --gutter:clamp(20px,5vw,64px);
-  --radius:18px;
-  --font-display:"Space Grotesk",system-ui,sans-serif;
-  --font-body:"Inter",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,monospace;
-}
-
-/* ============ RESET ============ */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--font-body);
-  font-size:16px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-::selection{background:var(--accent);color:var(--accent-ink)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-
-/* ambient background glows */
-body::before,body::after{
-  content:"";position:fixed;z-index:-2;border-radius:50%;
-  filter:blur(120px);opacity:.14;pointer-events:none;
-}
-body::before{width:52vw;height:52vw;top:-14vw;right:-10vw;background:var(--accent);animation:drift1 26s ease-in-out infinite}
-body::after{width:46vw;height:46vw;bottom:-16vw;left:-12vw;background:var(--accent-2);animation:drift2 32s ease-in-out infinite}
-@keyframes drift1{50%{transform:translate(-6vw,7vw) scale(1.1)}}
-@keyframes drift2{50%{transform:translate(7vw,-5vw) scale(1.12)}}
-
-/* subtle grid overlay */
-.grid-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.4;
-  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
-  background-size:64px 64px;
-  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);
-}
-
-/* ============ LAYOUT ============ */
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
-section{padding:clamp(72px,11vw,140px) 0;position:relative}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--font-mono);font-size:12.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--accent);margin-bottom:22px;
-}
-.eyebrow .num{color:var(--faint)}
-h2.title{
-  font-family:var(--font-display);font-weight:700;
-  font-size:clamp(2rem,5.2vw,3.4rem);line-height:1.05;letter-spacing:-.02em;
-  margin-bottom:14px;
-}
-.section-lead{color:var(--muted);max-width:52ch;font-size:clamp(1rem,1.6vw,1.12rem)}
-
-/* ============ NAV ============ */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  transition:background .3s,border-color .3s,backdrop-filter .3s;
-  border-bottom:1px solid transparent;
-}
-header.scrolled{
-  background:rgba(10,10,11,.72);backdrop-filter:blur(14px) saturate(140%);
-  border-bottom-color:var(--border);
-}
-.nav{display:flex;align-items:center;justify-content:space-between;height:70px}
-.brand{font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
-.brand b{color:var(--accent)}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-links a{
-  color:var(--muted);font-size:.9rem;font-weight:500;
-  padding:8px 12px;border-radius:8px;transition:color .2s,background .2s;
-}
-.nav-links a:hover{color:var(--text)}
-.nav-links a.active{color:var(--text)}
-.nav-cta{
-  margin-left:10px;padding:10px 18px;border-radius:999px;
-  background:var(--accent);color:var(--accent-ink);font-weight:600;
-  display:inline-flex;align-items:center;gap:7px;
-  transition:transform .2s,box-shadow .2s;
-}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--accent)}
-.burger{display:none;background:none;border:1px solid var(--border);border-radius:10px;
-  width:44px;height:44px;cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center}
-.burger span{width:20px;height:2px;background:var(--text);border-radius:2px;transition:.25s}
-.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.burger.open span:nth-child(2){opacity:0}
-.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-/* ============ HERO ============ */
-.hero{padding-top:clamp(120px,17vw,180px);min-height:100vh;display:flex;align-items:center}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,72px);align-items:center;width:100%}
-.badge{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:7px 15px;border:1px solid var(--border-strong);border-radius:999px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
-  background:rgba(255,255,255,.02);margin-bottom:26px;
-}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);position:relative}
-.dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--accent);opacity:.4;animation:pulse 2s infinite}
-@keyframes pulse{100%{transform:scale(2.4);opacity:0}}
-.hero h1{
-  font-family:var(--font-display);font-weight:700;letter-spacing:-.03em;line-height:.98;
-  font-size:clamp(2.7rem,8.2vw,5.6rem);margin-bottom:24px;
-}
-.hero h1 .accent{
-  background:linear-gradient(100deg,var(--accent),var(--accent-2));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero p.lead{color:var(--muted);font-size:clamp(1.02rem,1.8vw,1.22rem);max-width:46ch;margin-bottom:34px}
-.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:52px}
-.btn{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:14px 24px;border-radius:999px;font-weight:600;font-size:.96rem;
-  transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;cursor:pointer;border:1px solid transparent;
-}
-.btn.primary{background:var(--accent);color:var(--accent-ink)}
-.btn.primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px -14px var(--accent)}
-.btn.ghost{background:transparent;border-color:var(--border-strong);color:var(--text)}
-.btn.ghost:hover{background:var(--surface);border-color:var(--text);transform:translateY(-3px)}
-.stats{display:flex;gap:clamp(24px,4vw,52px);flex-wrap:wrap}
-.stat .k{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3vw,2rem);line-height:1}
-.stat .k .accent{color:var(--accent)}
-.stat .v{color:var(--faint);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-top:7px;font-family:var(--font-mono)}
-
-/* hero visual — code card */
-.hero-visual{position:relative}
-.code-card{
-  background:linear-gradient(160deg,var(--surface-2),var(--surface));
-  border:1px solid var(--border);border-radius:var(--radius);
-  box-shadow:0 40px 80px -30px rgba(0,0,0,.8);overflow:hidden;position:relative;
-}
-.code-card::before{content:"";position:absolute;inset:0;border-radius:var(--radius);padding:1px;
-  background:linear-gradient(160deg,var(--accent),transparent 40%,transparent 60%,var(--accent-2));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.5;pointer-events:none}
-.code-top{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border)}
-.code-top i{width:12px;height:12px;border-radius:50%;background:#3a3a40}
-.code-top i:nth-child(1){background:#ff5f57}.code-top i:nth-child(2){background:#febc2e}.code-top i:nth-child(3){background:#28c840}
-.code-top span{margin-left:auto;font-family:var(--font-mono);font-size:11.5px;color:var(--faint)}
-pre.code{padding:22px 20px;font-family:var(--font-mono);font-size:13.5px;line-height:1.85;overflow-x:auto}
-.code .kw{color:#ff7edb}.code .ty{color:var(--accent-2)}.code .st{color:var(--accent)}.code .nm{color:#e4e4e7}.code .cm{color:var(--faint)}.code .fn{color:#ffd479}
-.chips-float{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;justify-content:center}
-.chip-f{font-family:var(--font-mono);font-size:12px;padding:8px 14px;border-radius:999px;border:1px solid var(--border-strong);background:rgba(255,255,255,.02);color:var(--muted)}
-.chip-f.on{border-color:var(--accent);color:var(--accent)}
-
-/* ============ ABOUT ============ */
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start}
-.about-body p{color:var(--muted);margin-bottom:18px;font-size:clamp(1rem,1.6vw,1.1rem)}
-.about-body p strong{color:var(--text);font-weight:600}
-.tag-cloud{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-.tag{padding:8px 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:.86rem;color:var(--muted);transition:.2s}
-.tag:hover{border-color:var(--accent);color:var(--text);transform:translateY(-2px)}
-.about-facts{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-2);padding:6px 26px}
-.fact{display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--border)}
-.fact:last-child{border-bottom:none}
-.fact .fk{color:var(--faint);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-mono)}
-.fact .fv{font-weight:600;text-align:right}
-.fact .fv a:hover{color:var(--accent)}
-
-/* ============ EXPERIENCE ============ */
-.timeline{margin-top:20px;border-left:1px solid var(--border);padding-left:0}
-.exp{position:relative;padding:0 0 clamp(34px,5vw,52px) clamp(26px,4vw,44px)}
-.exp::before{content:"";position:absolute;left:-6px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg),0 0 18px var(--accent)}
-.exp:last-child{padding-bottom:0}
-.exp .when{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:8px}
-.exp .role{font-family:var(--font-display);font-size:clamp(1.25rem,2.6vw,1.6rem);font-weight:600;line-height:1.15}
-.exp .where{color:var(--muted);margin:4px 0 4px;font-weight:500}
-.exp .proj{color:var(--faint);font-size:.9rem;margin-bottom:16px;font-style:italic}
-.exp ul{list-style:none;display:grid;gap:11px}
-.exp li{position:relative;padding-left:24px;color:var(--muted);font-size:.97rem}
-.exp li::before{content:"▹";position:absolute;left:0;color:var(--accent)}
-.exp li b{color:var(--text);font-weight:600}
-
-/* ============ PROJECTS ============ */
-.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.4vw,26px);margin-top:24px}
-.proj-grid .card.wide{grid-column:1/-1}
-.card{
-  position:relative;border:1px solid var(--border);border-radius:var(--radius);
-  background:linear-gradient(180deg,var(--surface),var(--bg-2));padding:28px;overflow:hidden;
-  transition:transform .3s,border-color .3s,box-shadow .3s;display:flex;flex-direction:column;min-height:238px;
-}
-.card::after{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),rgba(182,255,67,.07),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
-.card:hover{transform:translateY(-6px);border-color:var(--border-strong);box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
-.card:hover::after{opacity:1}
-.card .idx{font-family:var(--font-mono);font-size:12px;color:var(--faint)}
-.card .glyph{position:absolute;top:22px;right:24px;font-size:1.5rem;opacity:.5}
-.card .tags{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 12px}
-.card .tags span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(182,255,67,.25);padding:4px 9px;border-radius:6px;background:rgba(182,255,67,.05)}
-.card h3{font-family:var(--font-display);font-size:1.3rem;font-weight:600;line-height:1.15;margin-bottom:10px}
-.card p{color:var(--muted);font-size:.94rem;margin-bottom:18px}
-.card .link{margin-top:auto;font-weight:600;font-size:.9rem;color:var(--text);display:inline-flex;align-items:center;gap:7px;transition:gap .2s,color .2s}
-.card .link:hover{color:var(--accent);gap:11px}
-.card .link.muted{color:var(--faint);cursor:default}
-
-/* ============ WORK (showreel + gallery) ============ */
-.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,26px);margin-top:30px}
-.embed{position:relative;padding-top:56.25%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:#000}
-.embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vcap{margin-top:13px;color:var(--muted);font-size:.9rem;font-family:var(--font-mono)}
-.vcap b{color:var(--text);font-weight:600}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
-.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);cursor:zoom-in;aspect-ratio:16/10;background:var(--surface);margin:0}
-.shot img{width:100%;height:100%;object-fit:cover;transition:transform .55s}
-.shot:hover img{transform:scale(1.06)}
-.shot figcaption{position:absolute;inset:auto 0 0 0;padding:30px 16px 14px;display:flex;flex-direction:column;gap:2px;
-  background:linear-gradient(to top,rgba(0,0,0,.88),transparent);transform:translateY(8px);opacity:0;transition:.3s}
-.shot:hover figcaption{transform:none;opacity:1}
-.shot figcaption b{font-weight:600;font-size:.95rem}
-.shot figcaption span{color:var(--muted);font-size:.8rem}
-.shot::after{content:"⤢";position:absolute;top:9px;right:12px;color:#fff;opacity:0;transition:.3s;font-size:1rem;text-shadow:0 1px 5px #000}
-.shot:hover::after{opacity:.9}
-
-/* lightbox */
-.lightbox{position:fixed;inset:0;z-index:200;background:rgba(6,6,8,.93);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:5vw}
-.lightbox.open{display:flex}
-.lightbox img{max-width:100%;max-height:88vh;border-radius:10px;box-shadow:0 30px 90px -20px #000}
-.lightbox .lb-btn{position:absolute;color:#fff;cursor:pointer;background:rgba(255,255,255,.08);border:1px solid var(--border-strong);border-radius:50%;line-height:1;display:flex;align-items:center;justify-content:center;transition:.2s}
-.lightbox .lb-btn:hover{background:rgba(255,255,255,.18)}
-.lightbox .close{top:22px;right:26px;width:46px;height:46px;font-size:1.6rem}
-.lightbox .prev,.lightbox .next{top:50%;transform:translateY(-50%);width:52px;height:52px;font-size:2rem}
-.lightbox .prev{left:2.5vw}.lightbox .next{right:2.5vw}
-
-/* ============ HERO PORTRAIT ============ */
-.hero-visual{position:relative;max-width:430px;margin-inline:auto}
-.portrait{position:relative;z-index:2;border-radius:22px;overflow:hidden;aspect-ratio:4/5;
-  border:1px solid var(--border-strong);box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
-.portrait::before{content:"";position:absolute;inset:0;z-index:3;border-radius:22px;padding:1.5px;
-  background:linear-gradient(150deg,var(--accent),transparent 45%,transparent 60%,var(--accent-2));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.portrait img{width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:contrast(1.05) saturate(1.06)}
-.portrait::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(10,10,11,.62),transparent 42%)}
-.p-badge{position:absolute;z-index:4;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  padding:7px 12px;border-radius:999px;background:rgba(10,10,11,.72);border:1px solid var(--border-strong);backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:7px}
-.p-badge.tl{top:14px;left:14px;color:var(--accent);border-color:rgba(182,255,67,.45)}
-.p-badge.bl{bottom:16px;left:14px;color:var(--text)}
-.p-badge .d2{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.code-card.behind{position:absolute;z-index:1;right:-4%;top:-8%;width:60%;transform:rotate(6deg);opacity:.9;box-shadow:0 30px 70px -30px #000}
-.code-card.behind pre.code{font-size:11px;padding:15px 16px;line-height:1.7}
-.hero-visual .chips-float{margin-top:26px;position:relative;z-index:5}
-
-/* ============ TECH BREAKDOWNS ============ */
-.subhead{margin-top:clamp(56px,8vw,90px);padding-top:clamp(40px,6vw,64px);border-top:1px solid var(--border)}
-.breakdowns{display:grid;gap:24px;margin-top:34px}
-.bd{display:grid;grid-template-columns:1.05fr 1fr;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-2);overflow:hidden}
-.bd-media{position:relative;min-height:270px}
-.bd-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.bd-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,var(--bg-2))}
-.bd:nth-child(even) .bd-media{order:2}
-.bd:nth-child(even) .bd-media::after{background:linear-gradient(270deg,transparent 55%,var(--bg-2))}
-.bd-body{padding:clamp(24px,3vw,38px)}
-.bd-body .tag-mini{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
-.bd-body h4{font-family:var(--font-display);font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:600;margin-bottom:12px;line-height:1.15}
-.bd-body p{color:var(--muted);font-size:.96rem;margin-bottom:16px}
-.bd-tech{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
-.bd-tech span{font-size:.78rem;color:var(--muted);border:1px solid var(--border);background:var(--surface);padding:5px 10px;border-radius:7px}
-.bd-code{background:#0c0c0e;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;margin-bottom:16px;color:#d4d4d8}
-.bd-code .kw{color:#ff7edb}.bd-code .ty{color:var(--accent-2)}.bd-code .st{color:var(--accent)}.bd-code .cm{color:var(--faint)}.bd-code .fn{color:#ffd479}.bd-code .nm{color:#e4e4e7}
-.bd-impact{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--text)}
-.bd-impact::before{content:"▲";color:var(--accent);font-size:.7rem}
-
-@media(max-width:900px){.code-card.behind{display:none}}
-@media(max-width:760px){
-  .bd{grid-template-columns:1fr}.bd-media{min-height:210px}
-  .bd:nth-child(even) .bd-media{order:0}
-  .bd-media::after,.bd:nth-child(even) .bd-media::after{background:linear-gradient(0deg,var(--bg-2),transparent 55%)}
-}
-
-/* ============ SKILLS ============ */
-.skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,22px);margin-top:24px}
-.skill-cat{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-2);padding:24px}
-.skill-cat h4{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.skill-cat h4 span{color:var(--faint)}
-.skill-cat ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
-.skill-cat li{font-size:.86rem;color:var(--muted);border:1px solid var(--border);background:var(--surface);padding:7px 12px;border-radius:8px;transition:.2s}
-.skill-cat li:hover{color:var(--text);border-color:var(--accent-2)}
-
-/* ============ EDUCATION ============ */
-.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start}
-.edu-item{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid var(--border)}
-.edu-item:first-child{padding-top:0}
-.edu-item .yr{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);white-space:nowrap;padding-top:3px;min-width:74px}
-.edu-item h4{font-family:var(--font-display);font-size:1.12rem;font-weight:600;margin-bottom:5px}
-.edu-item p{color:var(--muted);font-size:.92rem}
-.lang{display:flex;flex-direction:column;gap:20px}
-.lang-row .top{display:flex;justify-content:space-between;margin-bottom:9px}
-.lang-row .top b{font-weight:600}
-.lang-row .top span{color:var(--faint);font-size:.85rem;font-family:var(--font-mono)}
-.bar{height:6px;border-radius:99px;background:var(--surface);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
-
-/* ============ CONTACT ============ */
-.contact{text-align:center}
-.contact .eyebrow{justify-content:center;display:flex}
-.contact h2{font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,7vw,4.6rem);letter-spacing:-.03em;line-height:1;margin-bottom:22px}
-.contact h2 .accent{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.contact p{color:var(--muted);max-width:46ch;margin:0 auto 36px;font-size:1.08rem}
-.contact-methods{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
-.cmethod{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border:1px solid var(--border-strong);border-radius:999px;font-weight:600;transition:.25s}
-.cmethod:hover{transform:translateY(-3px);border-color:var(--accent);color:var(--accent)}
-.cmethod.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.cmethod.primary:hover{color:var(--accent-ink);box-shadow:0 16px 40px -14px var(--accent)}
-
-/* ============ FOOTER ============ */
-footer{border-top:1px solid var(--border);padding:34px 0}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;color:var(--faint);font-size:.88rem}
-.foot .brand{font-size:1rem}
-.foot-links{display:flex;gap:18px}
-.foot-links a:hover{color:var(--accent)}
-
-/* ============ REVEAL ANIM ============ */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
-.reveal.in{opacity:1;transform:none}
-.reveal[data-d="1"]{transition-delay:.08s}
-.reveal[data-d="2"]{transition-delay:.16s}
-.reveal[data-d="3"]{transition-delay:.24s}
-
-/* ============ RESPONSIVE ============ */
-@media(max-width:900px){
-  .hero-grid,.about-grid,.edu-grid{grid-template-columns:1fr}
-  .hero-visual{order:-1;max-width:440px}
-  .proj-grid,.skill-grid,.video-grid{grid-template-columns:1fr}
-  .gallery{grid-template-columns:1fr 1fr}
-  .nav-links{
-    position:fixed;inset:70px 0 auto 0;flex-direction:column;align-items:stretch;gap:2px;
-    background:rgba(10,10,11,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
-    padding:16px var(--gutter) 24px;transform:translateY(-140%);transition:transform .35s cubic-bezier(.2,.8,.2,1);
-  }
-  .nav-links.open{transform:none}
-  .nav-links a{padding:14px 8px;font-size:1rem;border-bottom:1px solid var(--border)}
-  .nav-cta{margin:12px 0 0;justify-content:center}
-  .burger{display:flex}
-}
-@media(max-width:560px){
-  .skill-grid,.gallery{grid-template-columns:1fr}
-  .foot{flex-direction:column;text-align:center}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}
-}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aleksandr Kartak — Unity Developer &amp; Technical Artist</title>
+<meta name="description" content="Unity developer &amp; technical artist since 2021: gameplay systems, custom URP/HDRP shaders, VFX and optimization. Aura Farming is live on Steam.">
+<link rel="canonical" href="https://matbcontrol.github.io/">
+<meta name="theme-color" content="#06124F">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matbcontrol.github.io/">
+<meta property="og:title" content="Aleksandr Kartak — Unity Developer &amp; Technical Artist">
+<meta property="og:description" content="Gameplay programming, systems architecture and real-time visuals. Aura Farming is live on Steam (120+ reviews, Mostly Positive).">
+<meta property="og:image" content="https://matbcontrol.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Aleksandr Kartak — Unity Developer &amp; Technical Artist portfolio menu">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<script>try{!function(h){var c=h.classList,a=function(k,v){h.setAttribute('data-'+k,v)},s={};c.remove('no-js');c.add('js');try{s=JSON.parse(localStorage.getItem('kartak.settings'))||{}}catch(e){}s.motion=='reduced'&&a('motion','reduced');s.shader=='off'&&a('sea','off');new Date().getHours()||a('hour','zero');if(/[?&]og=1/.test(location.search))c.add('og');else try{s.motion=='reduced'||matchMedia('(prefers-reduced-motion: reduce)').matches||location.hash||sessionStorage.getItem('kartak.intro')||c.add('intro')}catch(e){}}(document.documentElement)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,600..900&family=Asap:ital,wght@0,400..600;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@1,600..800&display=swap&text=0123456789%2F%2B%25.%3A%E2%86%92%E2%80%93">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/core.js" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://matbcontrol.github.io/#person","name":"Aleksandr Kartak","jobTitle":"Unity Developer & Technical Artist","url":"https://matbcontrol.github.io/","email":"mailto:kartakcvc@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Tbilisi","addressCountry":"GE"},"sameAs":["https://github.com/matbcontrol","https://t.me/MATb_CONTROL"],"knowsAbout":["Unity","C#","HLSL","Shader Graph","URP","HDRP","VFX","Technical Art","Gameplay Programming","Systems Architecture"],"knowsLanguage":["ru","en"]},{"@type":"WebSite","@id":"https://matbcontrol.github.io/#website","name":"Aleksandr Kartak — Unity Developer & Technical Artist","url":"https://matbcontrol.github.io/","inLanguage":"en","author":{"@id":"https://matbcontrol.github.io/#person"}}]}</script>
 </head>
 <body>
-<div class="grid-bg" aria-hidden="true"></div>
+<svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+<defs><path id="p-ribbon" d="M0 14C60 2 120 2 180 14S300 26 360 14S480 2 540 14S660 26 720 14S840 2 900 14S1020 26 1080 14S1200 2 1260 14S1380 26 1440 14S1560 2 1620 14S1740 26 1800 14S1920 2 1980 14S2100 26 2160 14S2280 2 2340 14S2460 26 2520 14S2640 2 2700 14S2820 26 2880 14V42C2820 54 2760 54 2700 42S2580 30 2520 42S2400 54 2340 42S2220 30 2160 42S2040 54 1980 42S1860 30 1800 42S1680 54 1620 42S1500 30 1440 42S1320 54 1260 42S1140 30 1080 42S960 54 900 42S780 30 720 42S600 54 540 42S420 30 360 42S240 54 180 42S60 30 0 42Z"/><path id="p-wave" d="M0 28V14C60 0 120 0 180 14S300 28 360 14S480 0 540 14S660 28 720 14S840 0 900 14S1020 28 1080 14S1200 0 1260 14S1380 28 1440 14V28Z"/></defs>
+<filter id="fx-blue" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".359 .704 .137 0 0 .359 .704 .137 0 0 .359 .704 .137 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="discrete" tableValues=".024 .024 .024 .024 .024 .024 .047 .047 .047 .047 .106 .106 .106 .106 .106 .2 .988 .988 .988 .988"/><feFuncG type="discrete" tableValues=".039 .039 .039 .039 .039 .039 .071 .071 .071 .071 .22 .22 .22 .22 .22 .318 .996 .996 .996 .996"/><feFuncB type="discrete" tableValues=".169 .169 .169 .169 .169 .169 .298 .298 .298 .298 .941 .941 .941 .941 .941 1 .996 .996 .996 .996"/></feComponentTransfer></filter>
+<symbol id="i-tg" viewBox="0 0 24 24"><path fill="currentColor" d="M2.5 11.2 21.5 3.5 18 20.5l-5.8-4.1-2.9 3.2-.3-5L17.6 7 7.4 12.9z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 5.5h18v13H3zM3.5 6.5 12 13l8.5-6.5"/></symbol>
+<symbol id="i-gh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="5" r="2.2"/><circle cx="6" cy="19" r="2.2"/><circle cx="18" cy="7.5" r="2.2"/><path d="M6 7.2v9.6M18 9.7c0 4.3-7.5 3.3-11.2 7.3"/></g></symbol>
+<symbol id="i-cv" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 2.5h9.5L19 7v14.5H5zM14 2.5v5h5M8.5 12h7M8.5 15.5h7M8.5 19h4"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M6 3.5 21 12 6 20.5z"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path fill="currentColor" d="M5.5 4.5h16l-1.2 3h-16zM4.3 10.5h16l-1.2 3h-16zM3.1 16.5h16l-1.2 3h-16z"/></symbol>
+<symbol id="g-core" viewBox="0 0 28 28"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="14" cy="14" r="12"/><circle cx="14" cy="14" r="7"/></g><circle cx="14" cy="14" r="2.5" fill="currentColor"/></symbol>
+<symbol id="g-render" viewBox="0 0 28 28"><g fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4 24 22H4z"/><path d="M1 17.5l8-3.8M19 12.5l8-3.5M19.6 14.8H27M20.2 17l6.8 3.8"/></g></symbol>
+<symbol id="g-play" viewBox="0 0 28 28"><path fill="none" stroke="currentColor" stroke-width="2.4" d="M4 4l20 20M24 4 4 24"/><path fill="currentColor" d="M14 9.5l4.5 4.5-4.5 4.5L9.5 14z"/></symbol>
+<symbol id="g-arch" viewBox="0 0 28 28"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M8.8 3 14 6v6l-5.2 3-5.2-3V6zM19.2 3l5.2 3v6l-5.2 3L14 12V6zM14 12l5.2 3v6L14 24l-5.2-3v-6z"/></symbol>
+<symbol id="g-anim" viewBox="0 0 28 28"><path fill="none" stroke="currentColor" stroke-width="2.2" d="M2 14c2.5-7 5.5-7 8 0s5.5 7 8 0 5.5-7 8 0"/></symbol>
+<symbol id="g-int" viewBox="0 0 28 28"><path fill="none" stroke="currentColor" stroke-width="2.2" d="M2 20 7 9l5 11 5-11 5 11 4-8"/></symbol>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="sea" aria-hidden="true"></canvas>
+<div class="sea-fb" aria-hidden="true"></div>
 
-<!-- ============ NAV ============ -->
-<header id="top">
-  <div class="wrap nav">
-    <a href="#top" class="brand">Kartak<b>.</b></a>
-    <nav class="nav-links" id="navlinks">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#work">Work</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-      <a href="#contact" class="nav-cta">Let's talk ↗</a>
-    </nav>
-    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-  </div>
+<header class="hud">
+<svg class="hud__ribbon" viewBox="0 0 2880 56" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="g-ribbon" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--hud-ribbon-a)"/><stop offset=".5" style="stop-color:var(--hud-ribbon-b)"/><stop offset="1" style="stop-color:var(--hud-ribbon-a)"/></linearGradient></defs><use href="#p-ribbon" fill="url(#g-ribbon)"/></svg>
+<span class="hud__wm" aria-hidden="true" data-hud="wm"></span>
+<a class="hud__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span></a>
+<span class="hud__sec" aria-hidden="true" data-hud="sec"></span>
+<div class="hud__cal" aria-hidden="true"><span class="hud__date" data-hud="date"></span><span class="hud__dow" data-hud="dow"></span><span class="hud__slot" data-hud="slot"></span></div>
+<button class="hud__moon" type="button" aria-pressed="false" aria-label="Moon. Toggle 00:00 mode"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle class="hud__moon-base" r="20"/><path class="hud__moon-lit" d=""/></svg></button>
+<p class="hud__tz">Tbilisi · GMT+4<span data-hud="tbs"></span></p>
+<p class="hud__status">Open to work<span class="hud__rr"> · Relocation ready</span></p>
+<ul class="hud__icons">
+<li><a class="btn btn--icon has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener" aria-label="Telegram @MATb_CONTROL (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="mailto:kartakcvc@gmail.com" aria-label="Email kartakcvc@gmail.com"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="https://github.com/matbcontrol" target="_blank" rel="noopener" aria-label="GitHub matbcontrol (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-gh"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-cv"/></svg></a></li>
+</ul>
 </header>
 
-<main>
-<!-- ============ HERO ============ -->
-<section class="hero" id="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-text">
-      <span class="badge reveal"><span class="dot"></span> Available for opportunities · Relocation ready</span>
-      <h1 class="reveal" data-d="1">Unity Developer<br><span class="accent">&amp; Technical Artist.</span></h1>
-      <p class="lead reveal" data-d="2">In game development since 2021 — gameplay programming and systems architecture fused with technical art: custom shaders, VFX and rendering optimization in URP &amp; HDRP.</p>
-      <div class="hero-cta reveal" data-d="2">
-        <a href="#work" class="btn primary">View work ↗</a>
-        <a href="#contact" class="btn ghost">Get in touch</a>
-      </div>
-      <div class="stats reveal" data-d="3">
-        <div class="stat"><div class="k"><span class="accent">120+</span></div><div class="v">Steam reviews</div></div>
-        <div class="stat"><div class="k">Steam</div><div class="v">Shipped title</div></div>
-        <div class="stat"><div class="k">URP·HDRP</div><div class="v">Rendering</div></div>
-      </div>
-    </div>
-    <div class="hero-visual reveal" data-d="2">
-      <div class="portrait">
-        <img src="assets/work/image3.png" alt="Apothecary's Dungeon — custom GPU-instanced grass and vegetation" style="object-position:center" />
-        <span class="p-badge tl">Custom grass · Apothecary's Dungeon</span>
-        <span class="p-badge bl"><span class="d2"></span> Tbilisi · Open to work</span>
-      </div>
-      <div class="code-card behind" aria-hidden="true">
-        <div class="code-top"><i></i><i></i><i></i><span>Dev.cs</span></div>
-<pre class="code"><span class="kw">var</span> <span class="nm">me</span> = <span class="kw">new</span> <span class="ty">GameDev</span>(
-  <span class="st">"Unity"</span>, <span class="st">"Tech Art"</span>, since: <span class="st">2021</span>);</pre>
-      </div>
-      <div class="chips-float">
-        <span class="chip-f on">C#</span>
-        <span class="chip-f">URP</span>
-        <span class="chip-f">HLSL</span>
-        <span class="chip-f on">Shader Graph</span>
-        <span class="chip-f">VFX</span>
-      </div>
-    </div>
-  </div>
-</section>
+<nav class="rail" aria-label="Section index">
+<a class="rail__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span><span>Menu</span><kbd aria-hidden="true">Esc</kbd></a>
+<span class="rail__label" aria-hidden="true" data-rail="label"></span>
+<ol class="rail__list">
+<li><a class="rail__i" href="#reel" data-label="01 Reel"><span aria-hidden="true">1</span><span class="vh">Reel</span></a></li>
+<li><a class="rail__i" href="#projects" data-label="02 Projects"><span aria-hidden="true">2</span><span class="vh">Projects</span></a></li>
+<li><a class="rail__i" href="#tech-art" data-label="03 Tech art"><span aria-hidden="true">3</span><span class="vh">Tech art</span></a></li>
+<li><a class="rail__i" href="#gallery" data-label="04 Gallery"><span aria-hidden="true">4</span><span class="vh">Gallery</span></a></li>
+<li><a class="rail__i" href="#about" data-label="05 About"><span aria-hidden="true">5</span><span class="vh">About</span></a></li>
+<li><a class="rail__i" href="#experience" data-label="06 Experience"><span aria-hidden="true">6</span><span class="vh">Experience</span></a></li>
+<li><a class="rail__i" href="#skills" data-label="07 Skills"><span aria-hidden="true">7</span><span class="vh">Skills</span></a></li>
+<li><a class="rail__i" href="#education" data-label="08 Education"><span aria-hidden="true">8</span><span class="vh">Education</span></a></li>
+<li><a class="rail__i" href="#contact" data-label="09 Contact"><span aria-hidden="true">9</span><span class="vh">Contact</span></a></li>
+</ol>
+</nav>
 
-<!-- ============ ABOUT ============ -->
-<section id="about">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">01</span> / About</span>
-    <div class="about-grid">
-      <div class="about-body reveal">
-        <h2 class="title">Building worlds<br>people can play in.</h2>
-        <p><strong>Unity developer in game development since 2021</strong>, combining gameplay programming and systems architecture with technical art — shaders, VFX, animation and rendering / performance optimization.</p>
-        <p>Most recently at <strong>Elven Empire</strong> (Jan — Sep 2026): tech art on <strong>Aura Farming</strong> (live on Steam under the studio's Fropy Studio label, 120+ reviews, Mostly Positive) — ability VFX and character auras, UI and scene integration, post-processing and optimization — and a custom grass rendering system with URP water and vegetation shaders for <strong>Apothecary's Dungeon</strong>. Previously founded an indie studio and architected the core systems of <strong>Reday-1</strong> — a data-driven quest system, NPC navigation, save / load and custom Unity Editor tooling.</p>
-        <div class="tag-cloud">
-          <span class="tag">Unity</span><span class="tag">C#</span><span class="tag">URP</span><span class="tag">HDRP</span>
-          <span class="tag">HLSL</span><span class="tag">Shader Graph</span><span class="tag">VFX</span><span class="tag">Systems Architecture</span>
-          <span class="tag">Performance</span><span class="tag">Editor Tools</span>
-        </div>
-      </div>
-      <div class="about-facts reveal" data-d="1">
-        <div class="fact"><span class="fk">Name</span><span class="fv">Aleksandr Kartak</span></div>
-        <div class="fact"><span class="fk">Role</span><span class="fv">Unity Dev · Technical Artist</span></div>
-        <div class="fact"><span class="fk">Location</span><span class="fv">Tbilisi, Georgia</span></div>
-        <div class="fact"><span class="fk">Status</span><span class="fv">Open · Relocation ready</span></div>
-        <div class="fact"><span class="fk">Email</span><span class="fv"><a href="mailto:kartakcvc@gmail.com">kartakcvc@gmail.com</a></span></div>
-        <div class="fact"><span class="fk">Telegram</span><span class="fv"><a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">@MATb_CONTROL</a></span></div>
-        <div class="fact"><span class="fk">Languages</span><span class="fv">Russian · English (B2)</span></div>
-      </div>
-    </div>
-  </div>
-</section>
+<main id="main" tabindex="-1">
 
-<!-- ============ EXPERIENCE ============ -->
-<section id="experience">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">02</span> / Experience</span>
-    <h2 class="title reveal">Professional journey.</h2>
-    <div class="timeline">
-      <div class="exp reveal">
-        <div class="when">Jan 2026 — Sep 2026</div>
-        <div class="role">Unity Developer</div>
-        <div class="where">Elven Empire</div>
-        <div class="proj">Aura Farming (Steam, Fropy Studio label) · King of Merchants · Apothecary's Dungeon</div>
-        <ul>
-          <li>Engineered a <b>custom grass rendering system</b> for large environments — vertex animation, GPU instancing (<b>DrawMeshInstancedIndirect</b>) and chunked loading.</li>
-          <li>Developed <b>custom URP shaders</b> (HLSL, Shader Graph) for water, vegetation, character outlines and environmental effects, plus custom lighting solutions.</li>
-          <li>Created gameplay and environmental <b>VFX</b> — attack effects, character auras, and ambient effects such as fireflies and butterflies.</li>
-          <li>Built character animation &amp; IK systems and DOTween-based UI transitions; optimized rendering for runtime performance.</li>
-        </ul>
-      </div>
-      <div class="exp reveal">
-        <div class="when">Nov 2024 — Dec 2025</div>
-        <div class="role">Founder &amp; Lead Game Developer</div>
-        <div class="where">Homo-Ludens</div>
-        <div class="proj">Reday-1 (unreleased)</div>
-        <ul>
-          <li>Founded the studio and led technical development with a <b>team of 6</b>, defining the architecture and implementing <b>10+ core systems</b> — player controller, movement, interaction, inventory, items, checkpoints and game states.</li>
-          <li>Architected a <b>data-driven quest system</b> (states, dependencies, ScriptableObject &amp; JSON databases) integrated with NPCs and an adapted Dialog System for Unity.</li>
-          <li>Built reusable <b>Unity Editor tools</b> for content creation, NPC navigation, save / load, scene streaming and a custom audio system with dynamic music.</li>
-          <li>Improved runtime performance through object pooling, memory optimization and FPS troubleshooting.</li>
-        </ul>
-      </div>
-      <div class="exp reveal">
-        <div class="when">Sep 2021 — Present</div>
-        <div class="role">Freelance Game Developer</div>
-        <div class="where">Self-employed</div>
-        <div class="proj">Gameplay &amp; progression systems for commercial, personal and game-jam projects</div>
-        <ul>
-          <li>Built the client-server side of <b>Cyber Abyss</b> (Кибер Бездна) — progression and microtransaction systems with an extensible architecture for online features.</li>
-          <li>Developed custom shaders, a predictive control system and progression mechanics for commissioned action titles; supported refactoring.</li>
-          <li>Integrated the <b>Yandex SDK</b>, passed platform moderation, and adapted / optimized Naninovel for School Story.</li>
-          <li>Rapidly prototyped playable demos for game jams — including a <b>complete prototype built solo in 12 hours</b>.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+<section id="top" class="sec sec--hero hero" data-mode="blue" data-frame="5" aria-labelledby="h-name">
+<div class="hero__scrim" aria-hidden="true"></div>
+<div class="shards" aria-hidden="true">
+<i class="shard" style="--i:0;--x:58%;--y:18%;--s:40px;--c:var(--shard-1);--r:12deg"></i>
+<i class="shard" style="--i:1;--x:66%;--y:31%;--s:18px;--c:var(--aqua);--r:-24deg"></i>
+<i class="shard" style="--i:2;--x:83%;--y:22%;--s:28px;--c:var(--shard-2);--r:40deg"></i>
+<i class="shard" style="--i:3;--x:91%;--y:44%;--s:14px;--c:var(--shard-3);--r:-8deg"></i>
+<i class="shard" style="--i:4;--x:74%;--y:63%;--s:32px;--c:var(--shard-1);--r:70deg"></i>
+<i class="shard" style="--i:5;--x:62%;--y:78%;--s:12px;--c:var(--aqua);--r:15deg"></i>
+<i class="shard" style="--i:6;--x:88%;--y:72%;--s:22px;--c:var(--shard-2);--r:-35deg"></i>
+</div>
+<div class="spine" aria-hidden="true"><span class="spine__t">Kartak</span></div>
+<span class="hero__idx" aria-hidden="true" data-idx>1</span>
 
-<!-- ============ PROJECTS ============ -->
-<section id="projects">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">03</span> / Selected projects</span>
-    <h2 class="title reveal">Things I've built.</h2>
-    <div class="proj-grid">
-      <article class="card reveal">
-        <div class="idx">01</div><div class="glyph">◈</div>
-        <div class="tags"><span>Unity</span><span>VFX</span><span>Steam</span></div>
-        <h3>Aura Farming</h3>
-        <p>Idle game, live on Steam since June 2026 under the studio's Fropy Studio label — 120+ reviews, Mostly Positive. Ability VFX and character auras, UI and scene integration, post-processing setup and rendering optimization.</p>
-        <a class="link" href="https://store.steampowered.com/app/4754800/Aura_Farming/" target="_blank" rel="noopener">Steam page ↗</a>
-      </article>
-      <article class="card reveal" data-d="1">
-        <div class="idx">02</div><div class="glyph">❋</div>
-        <div class="tags"><span>Unity</span><span>URP</span><span>HLSL</span></div>
-        <h3>Apothecary's Dungeon</h3>
-        <p>Stylized top-down RPG, in development. Custom grass rendering system — GPU instancing (DrawMeshInstancedIndirect), chunked loading, wind vertex animation — plus URP water &amp; vegetation shaders and custom lighting.</p>
-        <a class="link muted">In development — details on request</a>
-      </article>
-      <article class="card reveal" data-d="2">
-        <div class="idx">03</div><div class="glyph">▦</div>
-        <div class="tags"><span>Unity</span><span>Systems</span><span>Editor Tools</span></div>
-        <h3>Reday-1</h3>
-        <p>Data-driven quest system, NPC navigation, save / load and custom editor tooling. Architected 10+ core systems while leading a team of 6.</p>
-        <a class="link" href="https://store.steampowered.com/app/3595410/REday_1/" target="_blank" rel="noopener">Steam page ↗</a>
-      </article>
-      <article class="card reveal" data-d="3">
-        <div class="idx">04</div><div class="glyph">◎</div>
-        <div class="tags"><span>Unity</span><span>Client-Server</span><span>Live</span></div>
-        <h3>Cyber Abyss</h3>
-        <p>Client-server architecture, progression and microtransaction systems for an online action title, designed to extend cleanly with new online features.</p>
-        <a class="link muted">Commercial — details on request</a>
-      </article>
-      <article class="card reveal wide" data-d="3">
-        <div class="idx">05</div><div class="glyph">⚡</div>
-        <div class="tags"><span>Game Jams</span><span>Prototyping</span><span>Solo</span></div>
-        <h3>Jam Prototypes</h3>
-        <p>Playable demos for Halloween Game Jam 2023, Indie Wars 2023 and more — including a full prototype designed and built solo within 12 hours.</p>
-        <a class="link muted">Selection — on request</a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ============ WORK: SHOWREEL + GALLERY ============ -->
-<section id="work">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">04</span> / Selected work</span>
-    <h2 class="title reveal">In motion &amp; in frame.</h2>
-    <p class="section-lead reveal">Gameplay, VFX and technical art — custom grass &amp; water, dynamic lighting and cinematic scenes across shipped and in-development titles.</p>
-
-    <div class="video-grid">
-      <div class="video reveal">
-        <div class="embed"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/Ww_pdifttOQ" title="Gameplay &amp; VFX showreel" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-        <div class="vcap"><b>Showreel</b> — gameplay &amp; real-time VFX</div>
-      </div>
-      <div class="video reveal" data-d="1">
-        <div class="embed"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/4Y15WEwHLWU" title="Tech-art demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-        <div class="vcap"><b>Tech-art demo</b> — scenes &amp; transitions</div>
-      </div>
-    </div>
-
-    <div class="gallery">
-      <figure class="shot reveal" data-full="assets/work/image5.png">
-        <img loading="lazy" src="assets/work/image5.png" alt="Aura Farming — anime scene and idle UI" />
-        <figcaption><b>Aura Farming</b><span>UI &amp; scene integration · Steam</span></figcaption>
-      </figure>
-      <figure class="shot reveal" data-d="1" data-full="assets/work/image3.png">
-        <img loading="lazy" src="assets/work/image3.png" alt="Apothecary's Dungeon — stylized top-down RPG scene with custom grass" />
-        <figcaption><b>Apothecary's Dungeon</b><span>Custom grass, vegetation &amp; lighting</span></figcaption>
-      </figure>
-      <figure class="shot reveal" data-d="2" data-full="assets/work/image2.png">
-        <img loading="lazy" src="assets/work/image2.png" alt="Moody night street with lamp bloom" />
-        <figcaption><b>Night atmosphere</b><span>Lighting &amp; stylized post-processing</span></figcaption>
-      </figure>
-      <figure class="shot reveal" data-full="assets/work/image1.png">
-        <img loading="lazy" src="assets/work/image1.png" alt="Retro FPS combat with skeletons and VFX" />
-        <figcaption><b>Combat VFX</b><span>Impacts, muzzle flash &amp; pickups</span></figcaption>
-      </figure>
-      <figure class="shot reveal" data-d="1" data-full="assets/work/image6.png">
-        <img loading="lazy" src="assets/work/image6.png" alt="Cinematic narrative scene" />
-        <figcaption><b>Cinematic scene</b><span>Mood &amp; dramatic lighting</span></figcaption>
-      </figure>
-      <figure class="shot reveal" data-d="2" data-full="assets/work/image4.png">
-        <img loading="lazy" src="assets/work/image4.png" alt="Stylized merchant town on the water" />
-        <figcaption><b>Merchant world</b><span>Stylized environment &amp; water</span></figcaption>
-      </figure>
-    </div>
-
-    <!-- tech breakdowns -->
-    <div class="subhead reveal">
-      <span class="eyebrow">Tech breakdowns</span>
-      <h2 class="title">How it's built.</h2>
-    </div>
-    <div class="breakdowns">
-      <article class="bd reveal">
-        <div class="bd-media"><img loading="lazy" src="assets/work/image3.png" alt="Stylized top-down RPG with grass and vegetation" /></div>
-        <div class="bd-body">
-          <div class="tag-mini">// Tech Art · Shaders</div>
-          <h4>One wind core for all vegetation</h4>
-          <p>A single <b>WindCore.hlsl</b> include drives grass, flowers and every wind-swayed object — layered value-noise / FBM for the breeze, a travelling gust wave for punchy bursts, and a per-vertex bend that sags instead of stretching. Depends only on <b>_Time</b>, so it costs nothing at runtime.</p>
-          <div class="bd-tech"><span>HLSL</span><span>Value noise + FBM</span><span>Gust waves</span><span>Per-vertex bend</span><span>Distance fade</span><span>GPU instancing</span></div>
-<pre class="bd-code"><span class="cm">// travelling gust wave</span>
-<span class="kw">float</span> wavePhase = <span class="fn">dot</span>(worldPos.xz, dir) * <span class="st">0.1</span> - time * <span class="st">0.9</span>;
-<span class="kw">float</span> waveFront = <span class="fn">smoothstep</span>(<span class="st">0.90</span>, <span class="st">1.0</span>, <span class="fn">sin</span>(wavePhase));
-<span class="kw">float</span> totalWind = lightBreeze + waveMask * <span class="st">0.7</span>
-                + windNoise * (lightBreeze + waveMask) * <span class="st">0.4</span>;
-
-<span class="cm">// bend the blade, then sag so it never stretches</span>
-worldPos.xz += (dir + swirlDir) * bend;
-worldPos.y  -= (<span class="st">1.0</span> - <span class="fn">sqrt</span>(<span class="st">1.0</span> - bend * bend)) * heightT * scale;</pre>
-          <div class="bd-impact">One include animates grass, flowers &amp; foliage — driven only by _Time.</div>
-        </div>
-      </article>
-      <article class="bd reveal">
-        <div class="bd-media"><img loading="lazy" src="assets/work/image1.png" alt="Real-time combat VFX" /></div>
-        <div class="bd-body">
-          <div class="tag-mini">// Shaders · Lighting · VFX</div>
-          <h4>URP shaders, lighting &amp; VFX</h4>
-          <p>A single cohesive look across water, vegetation, character outlines and effects — built with custom HLSL and Shader Graph, custom lighting solutions, and gameplay / ambient VFX tuned for runtime performance.</p>
-          <div class="bd-tech"><span>HLSL</span><span>Shader Graph</span><span>Custom lighting</span><span>Stylized water</span><span>Outlines</span><span>VFX</span></div>
-          <div class="bd-impact">One consistent art direction — grass, water, characters and effects.</div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SKILLS ============ -->
-<section id="skills">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">05</span> / Skills</span>
-    <h2 class="title reveal">Toolbox.</h2>
-    <div class="skill-grid">
-      <div class="skill-cat reveal"><h4><span>//</span> Core</h4><ul>
-        <li>C#</li><li>Unity</li><li>Gameplay Programming</li><li>Systems Architecture</li><li>Technical Art</li><li>Performance Optimization</li>
-      </ul></div>
-      <div class="skill-cat reveal" data-d="1"><h4><span>//</span> Rendering &amp; Tech Art</h4><ul>
-        <li>URP</li><li>HDRP</li><li>Built-in RP</li><li>HLSL</li><li>Shader Graph</li><li>Custom Shaders</li><li>VFX</li><li>Custom Lighting</li><li>Rendering Optimization</li>
-      </ul></div>
-      <div class="skill-cat reveal" data-d="2"><h4><span>//</span> Gameplay Systems</h4><ul>
-        <li>AI / NPC Navigation</li><li>Quest Systems</li><li>Inventory</li><li>Progression</li><li>Save / Load</li><li>Game States</li><li>Client-Server</li>
-      </ul></div>
-      <div class="skill-cat reveal"><h4><span>//</span> Architecture &amp; Tools</h4><ul>
-        <li>ScriptableObjects</li><li>JSON</li><li>Unity Editor Tools</li><li>Data-Driven Design</li><li>Object Pooling</li><li>Git</li>
-      </ul></div>
-      <div class="skill-cat reveal" data-d="1"><h4><span>//</span> Animation &amp; Audio</h4><ul>
-        <li>Character Animation</li><li>Blend Trees</li><li>IK</li><li>DOTween</li><li>Custom Audio</li><li>Dynamic Music</li>
-      </ul></div>
-      <div class="skill-cat reveal" data-d="2"><h4><span>//</span> Integration</h4><ul>
-        <li>Dialog System for Unity</li><li>Naninovel</li><li>Yandex SDK</li><li>Microtransactions</li><li>Platform Compliance</li>
-      </ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ EDUCATION ============ -->
-<section id="education">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="num">06</span> / Education &amp; languages</span>
-    <h2 class="title reveal">Background.</h2>
-    <div class="edu-grid">
-      <div class="reveal">
-        <div class="edu-item">
-          <div class="yr">Master's</div>
-          <div><h4>Innovation Management</h4><p>Peter the Great St. Petersburg Polytechnic University (SPbPU)</p></div>
-        </div>
-        <div class="edu-item">
-          <div class="yr">Bachelor</div>
-          <div><h4>Information Systems &amp; Technologies</h4><p>Ufa University of Science and Technology</p></div>
-        </div>
-      </div>
-      <div class="lang reveal" data-d="1">
-        <div class="lang-row"><div class="top"><b>Russian</b><span>Native</span></div><div class="bar"><i data-w="100"></i></div></div>
-        <div class="lang-row"><div class="top"><b>English</b><span>Upper-Intermediate · B2</span></div><div class="bar"><i data-w="75"></i></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ CONTACT ============ -->
-<section id="contact" class="contact">
-  <div class="wrap">
-    <span class="eyebrow reveal">Let's build something</span>
-    <h2 class="reveal" data-d="1">Have a game in mind?<br><span class="accent">Let's talk.</span></h2>
-    <p class="reveal" data-d="1">Open to Unity roles and technical-art work — full-time or contract. Relocation ready. The fastest way to reach me is Telegram or email.</p>
-    <div class="contact-methods reveal" data-d="2">
-      <a class="cmethod primary" href="mailto:kartakcvc@gmail.com">✉ kartakcvc@gmail.com</a>
-      <a class="cmethod" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">✈ Telegram</a>
-      <a class="cmethod" href="https://github.com/matbcontrol" target="_blank" rel="noopener">⌥ GitHub</a>
-    </div>
-  </div>
-</section>
-</main>
-
-<footer>
-  <div class="wrap foot">
-    <span class="brand">Kartak<b style="color:var(--accent)">.</b></span>
-    <span>© <span id="yr"></span> Aleksandr Kartak — Unity Developer &amp; Technical Artist</span>
-    <div class="foot-links">
-      <a href="mailto:kartakcvc@gmail.com">Email</a>
-      <a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">Telegram</a>
-      <a href="https://github.com/matbcontrol" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-</footer>
-
-<!-- lightbox -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lb-btn close" aria-label="Close">×</button>
-  <button class="lb-btn prev" aria-label="Previous">‹</button>
-  <img src="" alt="" />
-  <button class="lb-btn next" aria-label="Next">›</button>
+<div class="idbox has-shape">
+<span class="shape"></span>
+<p class="micro idbox__role">Unity Developer &amp; Technical Artist<span class="rule"></span></p>
+<h1 id="h-name">Aleksandr Kartak</h1>
+<p class="idbox__lead">In game development since 2021 — gameplay programming and systems architecture fused with technical art: custom shaders, VFX and rendering optimization in URP &amp; HDRP.</p>
+<p class="idbox__short">Unity Developer &amp; Technical Artist — in game development since 2021.</p>
+<a class="proofbar has-shape" href="https://store.steampowered.com/app/4754800/Aura_Farming/" target="_blank" rel="noopener"><span class="shape"></span><span class="proofbar__t">Aura Farming</span><span class="proofbar__sep"> · </span><span class="proofbar__s">Live on Steam</span><span class="proofbar__sep"> · </span><span class="proofbar__n">120+ reviews · Mostly Positive</span><span class="proofbar__ext" aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+<div class="idbox__cta">
+<a class="btn btn--cmd has-shape" href="#reel" data-open="vdlg" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span><span class="btn__x">Watch </span>showreel</span></a>
+<a class="btn btn--line has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
+<a class="btn btn--line has-shape btn--cv" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener"><span class="shape"></span><span>CV · PDF</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+</div>
+<p class="idbox__mail">or email <a href="mailto:kartakcvc@gmail.com">kartakcvc@gmail.com</a> <button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></p>
 </div>
 
-<script>
-/* year */
-document.getElementById('yr').textContent = new Date().getFullYear();
+<nav class="cmds cmds--hero" id="menu" aria-label="Sections">
+<ol>
+<li class="cmd is-sel" style="--i:1;--r:-18deg;--x:0px;--c:var(--aqua)"><a class="cmd__a" href="#reel" data-i="1" data-frame="5" data-tip="Watch the showreel" data-sub="Gameplay &amp; real-time VFX · tech-art demo"><span class="cmd__cur"></span><span class="cmd__t">Reel</span><span class="cmd__t cmd__t--r" aria-hidden="true">Reel</span><span class="cmd__t cmd__t--w" aria-hidden="true">Reel</span></a></li>
+<li class="cmd" style="--i:2;--r:-9deg;--x:28px;--c:var(--aqua-2)"><a class="cmd__a" href="#projects" data-i="2" data-frame="2" data-tip="Browse projects" data-sub="Aura Farming live on Steam · Reday-1 · 3 on request"><span class="cmd__cur"></span><span class="cmd__t">Projects</span><span class="cmd__t cmd__t--r" aria-hidden="true">Projects</span><span class="cmd__t cmd__t--w" aria-hidden="true">Projects</span></a></li>
+<li class="cmd" style="--i:3;--r:-11deg;--x:12px;--c:var(--aqua-3)"><a class="cmd__a" href="#tech-art" data-i="3" data-frame="3" data-tip="Read the shader breakdowns" data-sub="WindCore.hlsl · URP shaders · this page's background"><span class="cmd__cur"></span><span class="cmd__t">Tech art</span><span class="cmd__t cmd__t--r" aria-hidden="true">Tech art</span><span class="cmd__t cmd__t--w" aria-hidden="true">Tech art</span></a></li>
+<li class="cmd" style="--i:4;--r:-14deg;--x:40px;--c:var(--aqua-card)"><a class="cmd__a" href="#gallery" data-i="4" data-frame="4" data-tip="View screenshots" data-sub="6 frames: lighting, VFX, environments"><span class="cmd__cur"></span><span class="cmd__t">Gallery</span><span class="cmd__t cmd__t--r" aria-hidden="true">Gallery</span><span class="cmd__t cmd__t--w" aria-hidden="true">Gallery</span></a></li>
+<li class="cmd" style="--i:5;--r:2deg;--x:20px;--c:var(--aqua)"><a class="cmd__a" href="#about" data-i="5" data-frame="6" data-tip="Check status" data-sub="Tbilisi, Georgia · open to work · relocation ready"><span class="cmd__cur"></span><span class="cmd__t">About</span><span class="cmd__t cmd__t--r" aria-hidden="true">About</span><span class="cmd__t cmd__t--w" aria-hidden="true">About</span></a></li>
+<li class="cmd" style="--i:6;--r:-7deg;--x:52px;--c:var(--aqua-2)"><a class="cmd__a" href="#experience" data-i="6" data-frame="1" data-tip="Review experience" data-sub="Sep 2021 → now · 3 roles"><span class="cmd__cur"></span><span class="cmd__t">Experience</span><span class="cmd__t cmd__t--r" aria-hidden="true">Experience</span><span class="cmd__t cmd__t--w" aria-hidden="true">Experience</span></a></li>
+<li class="cmd" style="--i:7;--r:-13deg;--x:30px;--c:var(--aqua-3)"><a class="cmd__a" href="#skills" data-i="7" data-frame="3" data-tip="See the toolbox" data-sub="C# · Unity · HLSL · Shader Graph · VFX · tools"><span class="cmd__cur"></span><span class="cmd__t">Skills</span><span class="cmd__t cmd__t--r" aria-hidden="true">Skills</span><span class="cmd__t cmd__t--w" aria-hidden="true">Skills</span></a></li>
+<li class="cmd" style="--i:8;--r:-5deg;--x:60px;--c:var(--aqua-card)"><a class="cmd__a" href="#education" data-i="8" data-frame="4" data-tip="Education &amp; languages" data-sub="Master's · Bachelor · English B2"><span class="cmd__cur"></span><span class="cmd__t">Education</span><span class="cmd__t cmd__t--r" aria-hidden="true">Education</span><span class="cmd__t cmd__t--w" aria-hidden="true">Education</span></a></li>
+<li class="cmd" style="--i:9;--r:-10deg;--x:36px;--c:var(--aqua)"><a class="cmd__a" href="#contact" data-i="9" data-frame="5" data-tip="Get in touch" data-sub="Telegram @MATb_CONTROL · email"><span class="cmd__cur"></span><span class="cmd__t">Contact</span><span class="cmd__t cmd__t--r" aria-hidden="true">Contact</span><span class="cmd__t cmd__t--w" aria-hidden="true">Contact</span></a></li>
+</ol>
+</nav>
 
-/* sticky nav */
-const header = document.getElementById('top');
-const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
-onScroll(); addEventListener('scroll', onScroll, {passive:true});
+<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Watch the showreel</p><p class="tip__s" data-tip-out="s">Gameplay &amp; real-time VFX · tech-art demo</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
+<p class="prompts" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd> Select · <kbd>Enter</kbd> Open · <kbd>Esc</kbd> Menu</p>
+<p class="seatag" hidden><span class="seatag__dot"></span>Live shader · Frame: <span data-out="sea-frame">Night atmosphere</span> · <span data-out="sea-fps">--</span> FPS · <button class="seatag__src" type="button" data-open="srcdlg">View source</button></p>
 
-/* mobile menu */
-const burger = document.getElementById('burger');
-const links = document.getElementById('navlinks');
-burger.addEventListener('click', () => {
-  burger.classList.toggle('open');
-  links.classList.toggle('open');
-});
-links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  burger.classList.remove('open'); links.classList.remove('open');
-}));
+<div class="ticker"><div class="ticker__track">
+<ul class="ticker__seq" aria-label="Core stack"><li>Unity</li><li>C#</li><li>HLSL</li><li>Shader Graph</li><li>VFX</li><li>URP / HDRP</li><li>Editor Tools</li></ul>
+<ul class="ticker__seq" aria-hidden="true"><li>Unity</li><li>C#</li><li>HLSL</li><li>Shader Graph</li><li>VFX</li><li>URP / HDRP</li><li>Editor Tools</li></ul>
+</div></div>
+</section>
 
-/* reveal on scroll */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-}, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+<section id="reel" class="sec sec--reel" data-mode="red" data-frame="2" aria-labelledby="h-reel">
+<svg class="seam seam--diag" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,96 1440,0 1440,96"/></svg>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">1</span><span class="sh__wm rv" data-rv="wm">Reel</span><div class="reel__band"><span>Showreel</span></div></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-reel" class="rv" data-rv="h2" tabindex="-1">Showreel</h2><p class="sh__tip">Gameplay &amp; real-time VFX · tech-art demo<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<div class="reel" id="work">
+<figure class="vid vid--main rv" data-rv="panel">
+<div class="vid__frame"><span class="vid__diamond"></span>
+<div class="yt" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><img class="yt__poster" src="https://i.ytimg.com/vi/Ww_pdifttOQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/Ww_pdifttOQ/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=Ww_pdifttOQ" target="_blank" rel="noopener" data-yt="Ww_pdifttOQ"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Gameplay &amp; VFX showreel</span><span class="vh nt"> (opens in new tab)</span></a></div>
+</div>
+<figcaption class="vid__cap"><b>Showreel</b> — gameplay &amp; real-time VFX</figcaption>
+</figure>
+<figure class="vid vid--demo rv" data-rv="panel">
+<div class="vid__frame">
+<div class="yt" data-yt="4Y15WEwHLWU" data-title="Tech-art demo"><img class="yt__poster" src="https://i.ytimg.com/vi/4Y15WEwHLWU/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/4Y15WEwHLWU/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=4Y15WEwHLWU" target="_blank" rel="noopener" data-yt="4Y15WEwHLWU"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Tech-art demo</span><span class="vh nt"> (opens in new tab)</span></a></div>
+</div>
+<figcaption class="vid__cap"><b>Tech-art demo</b> — scenes &amp; transitions</figcaption>
+</figure>
+</div>
+</div>
+</section>
 
-/* language bars fill when visible */
-const barIO = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.w + '%'; barIO.unobserve(e.target); } });
-}, {threshold:.5});
-document.querySelectorAll('.bar i').forEach(el => barIO.observe(el));
+<section id="projects" class="sec sec--projects" data-mode="blue" data-frame="5" aria-labelledby="h-projects">
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">2</span><span class="sh__wm rv" data-rv="wm">Projects</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-projects" class="rv" data-rv="h2" tabindex="-1">Projects</h2><p class="sh__tip">Aura Farming live on Steam · Reday-1 · 3 more on request<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
 
-/* active nav link */
-const navMap = {};
-document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => navMap[a.getAttribute('href').slice(1)] = a);
-const secIO = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    const a = navMap[e.target.id];
-    if(a && e.isIntersecting){
-      Object.values(navMap).forEach(x => x.classList.remove('active'));
-      a.classList.add('active');
-    }
-  });
-}, {rootMargin:'-45% 0px -50% 0px'});
-['about','experience','projects','work','skills','education','contact'].forEach(id => {
-  const s = document.getElementById(id); if(s) secIO.observe(s);
-});
+<div class="pgrid pgrid--main">
+<article class="pcard pcard--aura has-shape rv" data-rv="card" style="--tilt:-1.5deg" aria-labelledby="p-aura">
+<span class="shape"></span><span class="pcard__cur"></span>
+<figure class="pcard__fig"><img src="assets/work/image5-640.jpg" srcset="assets/work/image5-640.jpg 640w, assets/work/image5-1280.jpg 1280w" sizes="(max-width:599px) calc(100vw - 32px), (max-width:1239px) 58vw, 700px" width="1280" height="720" loading="lazy" decoding="async" alt="Aura Farming — anime scene and idle UI"><span class="pcard__status">Live on Steam</span></figure>
+<div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">I · Magician</span><h3 id="p-aura">Aura Farming</h3></div>
+<ul class="pcard__tags"><li>Unity</li><li>VFX</li><li>Steam</li></ul>
+<div class="results" role="group" aria-label="Aura Farming on Steam: 120+ reviews, Mostly Positive, live since June 2026" data-fx="rankup">
+<p class="results__h">Results</p>
+<dl class="results__list">
+<div class="results__row"><dt>Reviews</dt><dd><span class="num">120+</span></dd></div>
+<div class="results__row"><dt>Rating</dt><dd><span class="slab results__stamp">Mostly Positive</span></dd></div>
+<div class="results__row"><dt>On Steam since</dt><dd><span class="suf">Jun</span> <span class="num">2026</span></dd></div>
+</dl>
+<span class="results__fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+</div>
+<p class="pcard__desc">Idle game, live on Steam since June 2026 under the studio's Fropy Studio label — 120+ reviews, Mostly Positive.</p>
+<p class="pcard__part"><b>My part:</b> ability VFX and character auras, UI and scene integration, post-processing setup and rendering optimization.</p>
+<p class="pcard__credit">Built at Elven Empire · published under the studio's Fropy Studio label</p>
+<div class="pcard__cta">
+<a class="btn btn--cmd has-shape" href="https://store.steampowered.com/app/4754800/Aura_Farming/" target="_blank" rel="noopener"><span class="shape"></span><span>Steam page</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+<a class="btn btn--line has-shape" href="#reel"><span class="shape"></span><span>See it in the reel</span></a>
+</div>
+</article>
 
-/* card spotlight follow */
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('pointermove', e => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-  });
-});
+<article class="pcard pcard--reday has-shape rv" data-rv="card" style="--tilt:1.2deg" aria-labelledby="p-reday">
+<span class="shape"></span><span class="pcard__cur"></span>
+<div class="pcard__type">
+<dl class="pcard__stats"><div class="stat"><dt>Team</dt><dd class="num">6</dd></div><div class="stat"><dt>Core systems</dt><dd class="num">10+</dd></div></dl>
+<span class="pcard__status">Unreleased · Steam page</span>
+</div>
+<div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">VII · Chariot</span><h3 id="p-reday">Reday-1</h3></div>
+<ul class="pcard__tags"><li>Unity</li><li>Systems</li><li>Editor Tools</li></ul>
+<p class="pcard__desc">Data-driven quest system, NPC navigation, save / load and custom editor tooling. Architected 10+ core systems while leading a team of 6.</p>
+<p class="pcard__credit">Founder &amp; Lead Game Developer, Homo-Ludens</p>
+<div class="pcard__cta">
+<a class="btn btn--cmd has-shape" href="https://store.steampowered.com/app/3595410/REday_1/" target="_blank" rel="noopener"><span class="shape"></span><span>Steam page</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+</div>
+</article>
+</div>
 
-/* lightbox gallery */
-const shots = [...document.querySelectorAll('.shot')];
-const lb = document.getElementById('lightbox');
-const lbImg = lb.querySelector('img');
-let lbIdx = 0;
-function lbOpen(i){
-  lbIdx = (i + shots.length) % shots.length;
-  const s = shots[lbIdx];
-  lbImg.src = s.dataset.full;
-  lbImg.alt = s.querySelector('img').alt;
-  lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
-}
-function lbClose(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }
-shots.forEach((s,i) => s.addEventListener('click', () => lbOpen(i)));
-lb.querySelector('.close').addEventListener('click', lbClose);
-lb.querySelector('.prev').addEventListener('click', e => { e.stopPropagation(); lbOpen(lbIdx-1); });
-lb.querySelector('.next').addEventListener('click', e => { e.stopPropagation(); lbOpen(lbIdx+1); });
-lb.addEventListener('click', e => { if(e.target === lb) lbClose(); });
-addEventListener('keydown', e => {
-  if(!lb.classList.contains('open')) return;
-  if(e.key === 'Escape') lbClose();
-  if(e.key === 'ArrowLeft') lbOpen(lbIdx-1);
-  if(e.key === 'ArrowRight') lbOpen(lbIdx+1);
-});
-</script>
+<p class="micro pgrid__label">On request<span class="rule"></span></p>
+<div class="pgrid pgrid--req">
+<article class="pcard pcard--req pcard--apoth has-shape rv" data-rv="card" style="--tilt:-1deg" aria-labelledby="p-apoth">
+<span class="shape"></span><span class="pcard__cur"></span>
+<figure class="pcard__fig"><img src="assets/work/image3-640.jpg" srcset="assets/work/image3-640.jpg 640w, assets/work/image3-1280.jpg 1280w" sizes="(max-width:599px) calc(100vw - 32px), 380px" width="1280" height="720" loading="lazy" decoding="async" alt="Apothecary's Dungeon — custom GPU-instanced grass and vegetation"><span class="pcard__status">In development</span></figure>
+<div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">XVII · Star</span><h3 id="p-apoth">Apothecary's Dungeon</h3></div>
+<ul class="pcard__tags"><li>Unity</li><li>URP</li><li>HLSL</li></ul>
+<p class="pcard__desc">Stylized top-down RPG, in development. Custom grass rendering system — GPU instancing (DrawMeshInstancedIndirect), chunked loading, wind vertex animation — plus URP water &amp; vegetation shaders and custom lighting.</p>
+<div class="pcard__cta"><a class="btn btn--line has-shape" href="#tech-art"><span class="shape"></span><span>See the grass shader</span><span aria-hidden="true">↓</span></a></div>
+<p class="pcard__stamp">Details on request</p>
+</article>
+
+<article class="pcard pcard--req pcard--cyber has-shape rv" data-rv="card" style="--tilt:1.5deg" aria-labelledby="p-cyber">
+<span class="shape"></span><span class="pcard__cur"></span>
+<div class="pcard__type"><svg class="pcard__glyph" viewBox="0 0 280 150" aria-hidden="true"><circle cx="140" cy="75" r="64" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="140" cy="75" r="34" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="140" cy="75" r="30" fill="currentColor" opacity=".16"/><text x="140" y="79" text-anchor="middle" font-size="12" fill="currentColor">SERVER</text><text x="140" y="31" text-anchor="middle" font-size="10" fill="currentColor">CLIENT</text><path d="M79 70h22m-5-5 5 5-5 5M101 82H79m5-5-5 5 5 5M201 70h-22m5-5-5 5 5 5M179 82h22m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="pcard__status">Commercial</span></div>
+<div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">X · Wheel</span><h3 id="p-cyber">Cyber Abyss</h3></div>
+<ul class="pcard__tags"><li>Unity</li><li>Client-Server</li><li>Live</li></ul>
+<p class="pcard__desc">Client-server architecture, progression and microtransaction systems for an online action title, designed to extend cleanly with new online features.</p>
+<div class="pcard__cta"><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Cyber%20Abyss%20%E2%80%94%20details"><span class="shape"></span><span>Ask about it</span></a></div>
+<p class="pcard__stamp">Details on request</p>
+</article>
+
+<article class="pcard pcard--req pcard--jam has-shape rv" data-rv="card" style="--tilt:-0.6deg" aria-labelledby="p-jam">
+<span class="shape"></span><span class="pcard__cur"></span>
+<div class="pcard__type"><p class="pcard__big"><span class="suf">Solo</span> · <span class="num">12</span> <span class="suf">h</span></p><span class="pcard__status">Game jams</span></div>
+<div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">0 · Fool</span><h3 id="p-jam">Jam Prototypes</h3></div>
+<ul class="pcard__tags"><li>Game Jams</li><li>Prototyping</li><li>Solo</li></ul>
+<p class="pcard__desc">Playable demos for Halloween Game Jam 2023, Indie Wars 2023 and more — including a full prototype designed and built solo within 12 hours.</p>
+<div class="pcard__cta"><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Jam%20prototypes%20%E2%80%94%20selection"><span class="shape"></span><span>Ask for the selection</span></a></div>
+<p class="pcard__stamp">Selection on request</p>
+</article>
+</div>
+</div>
+</section>
+
+<section id="tech-art" class="sec sec--tech" data-mode="night" data-frame="3" aria-labelledby="h-tech">
+<svg class="seam seam--diag" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,96 1440,0 1440,96"/></svg>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">3</span><span class="sh__wm rv" data-rv="wm">00:00</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-tech" class="rv" data-rv="h2" tabindex="-1">Tech art</h2><p class="sh__tip">How it's built — WindCore.hlsl · URP shaders · this page's background<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+
+<article class="bd bd--wind rv" data-rv="panel" aria-labelledby="bd-wind">
+<figure class="bd__media"><img src="assets/work/image3-640.jpg" srcset="assets/work/image3-640.jpg 640w, assets/work/image3-1280.jpg 1280w" sizes="(max-width:599px) calc(100vw - 32px), (max-width:1239px) 50vw, 620px" width="1280" height="720" loading="lazy" decoding="async" alt="Stylized top-down RPG with grass and vegetation"></figure>
+<div class="bd__body">
+<p class="micro bd__tag">// Tech Art · Shaders</p>
+<h3 id="bd-wind">One wind core for all vegetation</h3>
+<p>A single <b>WindCore.hlsl</b> include drives grass, flowers and every wind-swayed object — layered value-noise / FBM for the breeze, a travelling gust wave for punchy bursts, and a per-vertex bend that sags instead of stretching. Depends only on <b>_Time</b>, so it costs nothing at runtime.</p>
+<figure class="code"><figcaption class="code__tag">WindCore.hlsl <span class="micro">HLSL</span></figcaption>
+<pre tabindex="0" aria-label="WindCore.hlsl excerpt"><code id="code-wind"><span class="tc">// travelling gust wave</span>
+<span class="tk">float</span> wavePhase = <span class="tk">dot</span>(worldPos.xz, dir) * <span class="tn">0.1</span> - time * <span class="tn">0.9</span>;
+<span class="tk">float</span> waveFront = <span class="tk">smoothstep</span>(<span class="tn">0.90</span>, <span class="tn">1.0</span>, <span class="tk">sin</span>(wavePhase));
+<span class="tk">float</span> totalWind = lightBreeze + waveMask * <span class="tn">0.7</span>
+                + windNoise * (lightBreeze + waveMask) * <span class="tn">0.4</span>;
+
+<span class="tc">// bend the blade, then sag so it never stretches</span>
+worldPos.xz += (dir + swirlDir) * bend;
+worldPos.y  -= (<span class="tn">1.0</span> - <span class="tk">sqrt</span>(<span class="tn">1.0</span> - bend * bend)) * heightT * scale;</code></pre>
+<button class="btn--copy" type="button" data-copy-target="#code-wind" data-announce="Code copied" hidden>Copy</button></figure>
+<ul class="chips chips--night"><li>HLSL</li><li>Value noise + FBM</li><li>Gust waves</li><li>Per-vertex bend</li><li>Distance fade</li><li>GPU instancing</li></ul>
+<p class="bd__res slab">One include animates grass, flowers &amp; foliage — driven only by _Time.</p>
+</div>
+</article>
+
+<article class="bd bd--urp bd--flip rv" data-rv="panel" aria-labelledby="bd-urp">
+<figure class="bd__media"><img src="assets/work/image1-640.jpg" srcset="assets/work/image1-640.jpg 640w, assets/work/image1-1280.jpg 1280w" sizes="(max-width:599px) calc(100vw - 32px), (max-width:1239px) 50vw, 620px" width="1280" height="720" loading="lazy" decoding="async" alt="Real-time combat VFX"></figure>
+<div class="bd__body">
+<p class="micro bd__tag">// Shaders · Lighting · VFX</p>
+<h3 id="bd-urp">URP shaders, lighting &amp; VFX</h3>
+<p>A single cohesive look across water, vegetation, character outlines and effects — built with custom HLSL and Shader Graph, custom lighting solutions, and gameplay / ambient VFX tuned for runtime performance.</p>
+<ul class="chips chips--night"><li>HLSL</li><li>Shader Graph</li><li>Custom lighting</li><li>Stylized water</li><li>Outlines</li><li>VFX</li></ul>
+<p class="bd__res slab">One consistent art direction — grass, water, characters and effects.</p>
+</div>
+</article>
+
+<article class="bd bd--sea rv" data-rv="panel" id="water" aria-labelledby="bd-sea">
+<div class="bd__body">
+<p class="micro bd__tag">// WebGL1 · GLSL ES 1.0 · no libraries</p>
+<h3 id="bd-sea">The water behind this page</h3>
+<p>This page's background is a live fragment shader running over frames from projects I worked on: sine distortion, mip-bias blur, BT.601 luminance mapped onto a five-step palette, stepped caustics and rising bubbles — rendered at reduced resolution and paused when you can't see it.</p>
+<ol class="chips chips--night pipe" aria-label="Shader pipeline"><li>frame</li><li>sine distort</li><li>mip blur</li><li>luminance</li><li>5-step palette</li><li>caustics</li><li>bubbles</li><li>overlays</li></ol>
+<p class="bd__off">Shader is off on this device (reduced motion / data saver / no WebGL).</p>
+</div>
+<div class="bench" hidden>
+<div class="bench__g" role="group" aria-label="Grade"><span class="micro" aria-hidden="true">Grade</span><button type="button" data-sea-set="grade:1" aria-pressed="true">On</button><button type="button" data-sea-set="grade:0" aria-pressed="false">Raw</button></div>
+<div class="bench__g" role="group" aria-label="Palette"><span class="micro" aria-hidden="true">Palette</span><button type="button" data-sea-set="mode:blue" aria-pressed="false">Blue</button><button type="button" data-sea-set="mode:night" aria-pressed="true">00:00</button><button type="button" data-sea-set="mode:red" aria-pressed="false">Red</button></div>
+<div class="bench__g" role="group" aria-label="Caustics"><span class="micro" aria-hidden="true">Caustics</span><button type="button" data-sea-set="caustics:1" aria-pressed="true">On</button><button type="button" data-sea-set="caustics:0" aria-pressed="false">Off</button></div>
+<div class="bench__g" role="group" aria-label="Frame"><span class="micro" aria-hidden="true">Frame</span><button type="button" data-sea-set="frame:1" aria-pressed="false">1</button><button type="button" data-sea-set="frame:2" aria-pressed="false">2</button><button type="button" data-sea-set="frame:3" aria-pressed="true">3</button><button type="button" data-sea-set="frame:4" aria-pressed="false">4</button><button type="button" data-sea-set="frame:5" aria-pressed="false">5</button><button type="button" data-sea-set="frame:6" aria-pressed="false">6</button></div>
+<p class="bench__act"><button class="btn btn--line has-shape" type="button" data-sea-set="reset"><span class="shape"></span><span>Reset</span></button><button class="btn btn--cmd has-shape" type="button" data-open="srcdlg"><span class="shape"></span><span>View source</span></button></p>
+<p class="micro bench__readout">Res <span data-out="sea-res">0.5</span>× · Cap 30 FPS · Caustics 10 Hz · <span data-out="sea-fps2">--</span> FPS now</p>
+</div>
+</article>
+</div>
+</section>
+
+<section id="gallery" class="sec sec--gallery surface-white" data-mode="white" data-frame="4" aria-labelledby="h-gallery">
+<svg class="seam seam--wave seam--top" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><use href="#p-wave"/></svg>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">4</span><span class="sh__wm rv" data-rv="wm">Gallery</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-gallery" class="rv" data-rv="h2" tabindex="-1">Gallery</h2><p class="sh__tip">6 frames — lighting, VFX, environments<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<p class="sec__lead">Gameplay, VFX and technical art — custom grass &amp; water, dynamic lighting and cinematic scenes across shipped and in-development titles.</p>
+<div class="gal">
+<ol class="gal__list">
+<li><a class="gal__row is-sel" href="assets/work/image5-1280.jpg" data-i="0" data-frame="5"><img class="gal__thumb" src="assets/work/image5-640.jpg" srcset="assets/work/image5-640.jpg 640w, assets/work/image5-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="720" loading="lazy" decoding="async" alt="Aura Farming — anime scene and idle UI"><span class="gal__txt"><b>Aura Farming</b> <span>UI &amp; scene integration · Steam</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+<li><a class="gal__row" href="assets/work/image3-1280.jpg" data-i="1" data-frame="3"><img class="gal__thumb" src="assets/work/image3-640.jpg" srcset="assets/work/image3-640.jpg 640w, assets/work/image3-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="720" loading="lazy" decoding="async" alt="Apothecary's Dungeon — stylized top-down RPG scene with custom grass"><span class="gal__txt"><b>Apothecary's Dungeon</b> <span>Custom grass, vegetation &amp; lighting</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+<li><a class="gal__row" href="assets/work/image2-1280.jpg" data-i="2" data-frame="2"><img class="gal__thumb" src="assets/work/image2-640.jpg" srcset="assets/work/image2-640.jpg 640w, assets/work/image2-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="727" loading="lazy" decoding="async" alt="Moody night street with lamp bloom"><span class="gal__txt"><b>Night atmosphere</b> <span>Lighting &amp; stylized post-processing</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+<li><a class="gal__row" href="assets/work/image1-1280.jpg" data-i="3" data-frame="1"><img class="gal__thumb" src="assets/work/image1-640.jpg" srcset="assets/work/image1-640.jpg 640w, assets/work/image1-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="720" loading="lazy" decoding="async" alt="Retro FPS combat with skeletons and VFX"><span class="gal__txt"><b>Combat VFX</b> <span>Impacts, muzzle flash &amp; pickups</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+<li><a class="gal__row" href="assets/work/image6-1280.jpg" data-i="4" data-frame="6"><img class="gal__thumb" src="assets/work/image6-640.jpg" srcset="assets/work/image6-640.jpg 640w, assets/work/image6-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="720" loading="lazy" decoding="async" alt="Cinematic narrative scene"><span class="gal__txt"><b>Cinematic scene</b> <span>Mood &amp; dramatic lighting</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+<li><a class="gal__row" href="assets/work/image4-1280.jpg" data-i="5" data-frame="4"><img class="gal__thumb" src="assets/work/image4-640.jpg" srcset="assets/work/image4-640.jpg 640w, assets/work/image4-1280.jpg 1280w" sizes="(max-width:599px) 80vw, 96px" width="1280" height="715" loading="lazy" decoding="async" alt="Stylized merchant town on the water"><span class="gal__txt"><b>Merchant world</b> <span>Stylized environment &amp; water</span></span><span class="gal__view" aria-hidden="true">View</span></a></li>
+</ol>
+<figure class="gal__pv" aria-hidden="true">
+<div class="gal__frame has-shape"><span class="shape"></span><img class="gal__img" src="assets/work/image5-640.jpg" srcset="assets/work/image5-640.jpg 640w, assets/work/image5-1280.jpg 1280w" sizes="(max-width:1023px) 100vw, 800px" width="1280" height="720" loading="lazy" decoding="async" alt=""></div>
+<figcaption class="gal__cap"><b data-gal="cap">Aura Farming</b><span data-gal="sub">UI &amp; scene integration · Steam</span></figcaption>
+<span class="gal__shards"><i class="shard" style="--i:0;--s:34px;--c:var(--shard-1);--r:18deg"></i><i class="shard" style="--i:1;--s:20px;--c:var(--shard-2);--r:-30deg"></i><i class="shard" style="--i:2;--s:14px;--c:var(--aqua-3);--r:60deg"></i></span>
+</figure>
+</div>
+</div>
+<svg class="seam seam--wave seam--bot" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><use href="#p-wave"/></svg>
+</section>
+
+<section id="about" class="sec sec--about" data-mode="blue" data-frame="6" aria-labelledby="h-about">
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">5</span><span class="sh__wm rv" data-rv="wm">Status</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-about" class="rv" data-rv="h2" tabindex="-1">About</h2><p class="sh__tip">Tbilisi, Georgia · open to work · relocation ready<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<div class="about">
+<div class="about__bars">
+<div class="bar bar--id rv" data-rv="panel">
+<span class="mono" aria-hidden="true">K</span>
+<span class="role-tag role-tag--a" aria-hidden="true">Unity dev</span><span class="role-tag role-tag--b" aria-hidden="true">Tech art</span>
+<p class="bar__line">/Since 2021 /Tbilisi /English B2</p>
+</div>
+<dl class="bar bar--facts rv" data-rv="panel">
+<div><dt>Name</dt><dd>Aleksandr Kartak</dd></div>
+<div><dt>Role</dt><dd>Unity Dev · Technical Artist</dd></div>
+<div><dt>Location</dt><dd>Tbilisi, Georgia</dd></div>
+<div><dt>Status</dt><dd class="is-accent">Open · Relocation ready</dd></div>
+<div><dt>Languages</dt><dd>Russian · English (B2)</dd></div>
+</dl>
+<dl class="bar bar--contact rv" data-rv="panel">
+<div><dt>Email</dt><dd><a href="mailto:kartakcvc@gmail.com">kartakcvc@gmail.com</a> <button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></dd></div>
+<div><dt>Telegram</dt><dd><a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">@MATb_CONTROL<span class="vh"> (opens in new tab)</span></a></dd></div>
+</dl>
+</div>
+<div class="about__talk">
+<div class="dlg has-shape rv" data-rv="panel">
+<span class="shape"></span>
+<p class="dlg__name" aria-hidden="true"><span>Kartak</span><span class="micro">Talk</span></p>
+<h3>Building worlds people can play in.</h3>
+<p><strong>Unity developer in game development since 2021</strong>, combining gameplay programming and systems architecture with technical art — shaders, VFX, animation and rendering / performance optimization.</p>
+<p>Most recently at <strong>Elven Empire</strong> (Jan — Sep 2026): tech art on <strong>Aura Farming</strong> (live on Steam under the studio's Fropy Studio label, 120+ reviews, Mostly Positive) — ability VFX and character auras, UI and scene integration, post-processing and optimization — and a custom grass rendering system with URP water and vegetation shaders for <strong>Apothecary's Dungeon</strong>. Previously founded an indie studio and architected the core systems of <strong>Reday-1</strong> — a data-driven quest system, NPC navigation, save / load and custom Unity Editor tooling.</p>
+<span class="dlg__next"></span>
+</div>
+<ul class="chips chips--tags"><li>Unity</li><li>C#</li><li>URP</li><li>HDRP</li><li>HLSL</li><li>Shader Graph</li><li>VFX</li><li>Systems Architecture</li><li>Performance</li><li>Editor Tools</li></ul>
+<p class="seeking"><span class="micro seeking__k">Seeking<span class="rule"></span></span> Open to Unity roles and technical-art work — full-time or contract.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="experience" class="sec sec--exp" data-mode="blue" data-frame="1" aria-labelledby="h-exp">
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">6</span><span class="sh__wm rv" data-rv="wm">Calendar</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-exp" class="rv" data-rv="h2" tabindex="-1">Experience</h2><p class="sh__tip">Sep 2021 → now · 3 roles<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<nav class="ribbon rv" data-rv="panel" aria-label="Timeline" style="--span:61">
+<svg class="ribbon__wave" viewBox="0 0 2880 56" preserveAspectRatio="none" aria-hidden="true"><use href="#p-ribbon"/></svg>
+<ol class="ribbon__years" aria-hidden="true"><li style="--m:0">2021</li><li style="--m:4">2022</li><li style="--m:16">2023</li><li style="--m:28">2024</li><li style="--m:40">2025</li><li style="--m:52">2026</li></ol>
+<ul class="ribbon__lanes">
+<li><a class="ribbon__bar ribbon__bar--free" href="#exp-free" data-exp="free" style="--m0:0;--m1:var(--span);--lane:1"><span>Freelance</span></a></li>
+<li><a class="ribbon__bar ribbon__bar--homo" href="#exp-homo" data-exp="homo" style="--m0:38;--m1:52;--lane:2"><span>Homo-Ludens</span></a></li>
+<li><a class="ribbon__bar ribbon__bar--elven" href="#exp-elven" data-exp="elven" style="--m0:52;--m1:61;--lane:3"><span>Elven Empire</span></a></li>
+</ul>
+<p class="ribbon__ms" style="--m:57" aria-hidden="true"><span>Aura Farming · Live on Steam</span></p>
+<span class="ribbon__now" style="--m:var(--span)" aria-hidden="true">Now</span>
+</nav>
+
+<ol class="days">
+<li class="day has-shape rv" data-rv="panel" id="exp-elven" data-exp="elven">
+<span class="shape"></span>
+<div class="day__cal" aria-hidden="true"><span class="day__d">01/26</span><span class="day__arr">→</span><span class="day__d">09/26</span><span class="day__kind">Studio</span></div>
+<div class="day__body">
+<p class="day__when">Jan 2026 — Sep 2026</p>
+<h3>Unity Developer</h3>
+<p class="day__co">Elven Empire</p>
+<p class="day__proj">Aura Farming (Steam, Fropy Studio label) · King of Merchants · Apothecary's Dungeon</p>
+<ul>
+<li>Engineered a <strong>custom grass rendering system</strong> for large environments — vertex animation, GPU instancing (<strong>DrawMeshInstancedIndirect</strong>) and chunked loading.</li>
+<li>Developed <strong>custom URP shaders</strong> (HLSL, Shader Graph) for water, vegetation, character outlines and environmental effects, plus custom lighting solutions.</li>
+<li>Created gameplay and environmental <strong>VFX</strong> — attack effects, character auras, and ambient effects such as fireflies and butterflies.</li>
+<li>Built character animation &amp; IK systems and DOTween-based UI transitions; optimized rendering for runtime performance.</li>
+</ul>
+</div>
+</li>
+<li class="day has-shape rv" data-rv="panel" id="exp-homo" data-exp="homo">
+<span class="shape"></span>
+<div class="day__cal" aria-hidden="true"><span class="day__d">11/24</span><span class="day__arr">→</span><span class="day__d">12/25</span><span class="day__kind">Founder</span></div>
+<div class="day__body">
+<p class="day__when">Nov 2024 — Dec 2025</p>
+<h3>Founder &amp; Lead Game Developer</h3>
+<p class="day__co">Homo-Ludens</p>
+<p class="day__proj">Reday-1 (unreleased)</p>
+<ul>
+<li>Founded the studio and led technical development with a <strong>team of 6</strong>, defining the architecture and implementing <strong>10+ core systems</strong> — player controller, movement, interaction, inventory, items, checkpoints and game states.</li>
+<li>Architected a <strong>data-driven quest system</strong> (states, dependencies, ScriptableObject &amp; JSON databases) integrated with NPCs and an adapted Dialog System for Unity.</li>
+<li>Built reusable <strong>Unity Editor tools</strong> for content creation, NPC navigation, save / load, scene streaming and a custom audio system with dynamic music.</li>
+<li>Improved runtime performance through object pooling, memory optimization and FPS troubleshooting.</li>
+</ul>
+</div>
+</li>
+<li class="day has-shape rv" data-rv="panel" id="exp-free" data-exp="free">
+<span class="shape"></span>
+<div class="day__cal" aria-hidden="true"><span class="day__d">09/21</span><span class="day__arr">→</span><span class="day__d day__d--now">Now</span><span class="day__kind">Freelance</span></div>
+<div class="day__body">
+<p class="day__when">Sep 2021 — Present</p>
+<h3>Freelance Game Developer</h3>
+<p class="day__co">Self-employed</p>
+<p class="day__proj">Gameplay &amp; progression systems for commercial, person&#97;l and game-jam projects</p>
+<ul>
+<li>Built the client-server side of <strong>Cyber Abyss</strong> (<span lang="ru">Кибер Бездна</span>) — progression and microtransaction systems with an extensible architecture for online features.</li>
+<li>Developed custom shaders, a predictive control system and progression mechanics for commissioned action titles; supported refactoring.</li>
+<li>Integrated the <strong>Yandex SDK</strong>, passed platform moderation, and adapted / optimized Naninovel for School Story.</li>
+<li>Rapidly prototyped playable demos for game jams — including a <strong>complete prototype built solo in 12 hours</strong>.</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</section>
+
+<section id="skills" class="sec sec--skills" data-mode="blue" data-frame="3" aria-labelledby="h-skills">
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">7</span><span class="sh__wm rv" data-rv="wm">Skills</span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-skills" class="rv" data-rv="h2" tabindex="-1">Skills</h2><p class="sh__tip">Toolbox — 6 sets<span class="rule"></span></p><span class="sh__count" aria-hidden="true">6 sets</span><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<ul class="ssets">
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-core"/></svg>Core</h3><ul class="chips"><li>C#</li><li>Unity</li><li>Gameplay Programming</li><li>Systems Architecture</li><li>Technical Art</li><li>Performance Optimization</li></ul><a class="sset__proof" href="#projects">Proof <span aria-hidden="true">→</span><span class="vh"> for Core: projects</span></a></li>
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-render"/></svg>Rendering &amp; Tech Art</h3><ul class="chips"><li>URP</li><li>HDRP</li><li>Built-in RP</li><li>HLSL</li><li>Shader Graph</li><li>Custom Shaders</li><li>VFX</li><li>Custom Lighting</li><li>Rendering Optimization</li></ul><a class="sset__proof" href="#tech-art">Proof <span aria-hidden="true">→</span><span class="vh"> for Rendering &amp; Tech Art: tech art</span></a></li>
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-play"/></svg>Gameplay Systems</h3><ul class="chips"><li>AI / NPC Navigation</li><li>Quest Systems</li><li>Inventory</li><li>Progression</li><li>Save / Load</li><li>Game States</li><li>Client-Server</li></ul><a class="sset__proof" href="#projects">Proof <span aria-hidden="true">→</span><span class="vh"> for Gameplay Systems: projects</span></a></li>
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-arch"/></svg>Architecture &amp; Tools</h3><ul class="chips"><li>ScriptableObjects</li><li>JSON</li><li>Unity Editor Tools</li><li>Data-Driven Design</li><li>Object Pooling</li><li>Git</li></ul><a class="sset__proof" href="#exp-homo">Proof <span aria-hidden="true">→</span><span class="vh"> for Architecture &amp; Tools: Homo-Ludens</span></a></li>
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-anim"/></svg>Animation &amp; Audio</h3><ul class="chips"><li>Character Animation</li><li>Blend Trees</li><li>IK</li><li>DOTween</li><li>Custom Audio</li><li>Dynamic Music</li></ul><a class="sset__proof" href="#exp-elven">Proof <span aria-hidden="true">→</span><span class="vh"> for Animation &amp; Audio: Elven Empire</span></a></li>
+<li class="sset rv" data-rv="panel"><h3 class="sset__h"><span class="sset__cur"></span><svg class="glyph" aria-hidden="true"><use href="#g-int"/></svg>Integration</h3><ul class="chips"><li>Dialog System for Unity</li><li>Naninovel</li><li>Yandex SDK</li><li>Microtransactions</li><li>Platform Compliance</li></ul><a class="sset__proof" href="#exp-free">Proof <span aria-hidden="true">→</span><span class="vh"> for Integration: freelance</span></a></li>
+</ul>
+</div>
+</section>
+
+<section id="education" class="sec sec--edu surface-white" data-mode="white" data-frame="4" aria-labelledby="h-edu">
+<svg class="seam seam--wave seam--top" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><use href="#p-wave"/></svg>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">8</span><span class="sh__wm sh__wm--v rv" data-rv="wm">Education</span><span class="edu__disc"></span></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-edu" class="rv" data-rv="h2" tabindex="-1">Education &amp; languages</h2><p class="sh__tip">Master's · Bachelor · English B2<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<div class="edu">
+<ul class="edu__list">
+<li class="edu__row rv" data-rv="panel"><p class="edu__deg">Master's</p><div><h3>Innovation Management</h3><p>Peter the Great St. Petersburg Polytechnic University (SPbPU)</p></div></li>
+<li class="edu__row rv" data-rv="panel"><p class="edu__deg">Bachelor</p><div><h3>Information Systems &amp; Technologies</h3><p>Ufa University of Science and Technology</p></div></li>
+</ul>
+<div class="edu__langs rv" data-rv="panel">
+<p class="micro">Languages<span class="rule"></span></p>
+<dl class="langs">
+<div class="lang"><dt>Russian</dt><dd>Native</dd></div>
+<div class="lang"><dt>English</dt><dd>Upper-Intermediate · B2</dd><dd class="cefr" aria-hidden="true"><span>A1</span><span>A2</span><span>B1</span><span class="is-sel">B2</span><span>C1</span><span>C2</span></dd></div>
+</dl>
+</div>
+</div>
+</div>
+<svg class="seam seam--wave seam--bot" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><use href="#p-wave"/></svg>
+</section>
+
+<section id="contact" class="sec sec--contact" data-mode="duo" data-frame="5" aria-labelledby="h-contact" data-fx="finisher">
+<div class="sec__deco" aria-hidden="true">
+<img class="fin__duo" src="assets/img/contact-duo-640.jpg" srcset="assets/img/contact-duo-640.jpg 640w, assets/img/contact-duo-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="" loading="lazy" decoding="async">
+<p class="fin__words"><span>Unity</span><span>Shaders</span><span>VFX</span></p>
+<svg class="fin__arc" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190" pathLength="1"/></svg>
+<span class="sh__idx fin__idx">9</span>
+</div>
+<div class="sec__in fin">
+<div class="fin__sig">
+<p class="micro fin__eyebrow">Let's build something<span class="rule"></span></p>
+<h2 id="h-contact" tabindex="-1"><span class="fin__l1">Have a game in mind?</span> <span class="fin__l2">Let's talk.</span></h2>
+<p class="fin__body">Open to Unity roles and technical-art work — full-time or contract. Relocation ready. The fastest way to reach me is Telegram or email.</p>
+</div>
+<ul class="fin__cmds">
+<li class="fcmd fcmd--main is-sel" style="--i:1;--r:-6deg"><a class="fcmd__a has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Telegram</span> <span class="fcmd__d">@MATb_CONTROL</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:2;--r:-3deg"><a class="fcmd__a has-shape" href="mailto:kartakcvc@gmail.com"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Email</span> <span class="fcmd__d">kartakcvc@gmail.com</span></a><button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></li>
+<li class="fcmd" style="--i:3;--r:-4deg"><a class="fcmd__a has-shape" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">CV · PDF</span> <span class="fcmd__d" aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:4;--r:-5deg"><a class="fcmd__a has-shape" href="https://github.com/matbcontrol" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">GitHub</span> <span class="fcmd__d">matbcontrol</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:5;--r:-2deg"><a class="fcmd__a has-shape" href="https://store.steampowered.com/app/4754800/Aura_Farming/" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Steam · Aura Farming</span> <span class="fcmd__d" aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:6;--r:-4deg"><a class="fcmd__a has-shape" href="#reel" data-open="vdlg" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Showreel</span> <svg class="ico fcmd__d" aria-hidden="true"><use href="#i-play"/></svg></a></li>
+</ul>
+</div>
+</section>
+
+</main>
+
+<footer class="foot">
+<div class="foot__in">
+<p class="micro foot__eod">End of day<span class="rule"></span> <span class="foot__date" data-hud="date"></span></p>
+<a class="btn btn--line has-shape foot__resume" href="#top" data-resume><span class="shape"></span><span>Resume</span><span aria-hidden="true">▲</span></a>
+<p class="foot__copy">© <span data-year>2026</span> Aleksandr Kartak — Unity Developer &amp; Technical Artist</p>
+<ul class="foot__links"><li><a href="mailto:kartakcvc@gmail.com">Email</a></li><li><a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">Telegram<span class="vh"> (opens in new tab)</span></a></li><li><a href="https://github.com/matbcontrol" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in new tab)</span></a></li><li><a href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener">CV (PDF)<span class="vh"> (opens in new tab)</span></a></li></ul>
+<div class="foot__set" hidden>
+<div class="seg" role="group" aria-label="Motion"><span class="micro" aria-hidden="true">Motion</span><button type="button" data-set="motion:auto" aria-pressed="true">Full</button><button type="button" data-set="motion:reduced" aria-pressed="false">Reduced</button></div>
+<div class="seg" role="group" aria-label="Shader"><span class="micro" aria-hidden="true">Shader</span><button type="button" data-set="shader:on" aria-pressed="true">On</button><button type="button" data-set="shader:off" aria-pressed="false">Off</button></div>
+</div>
+<p class="foot__bg" hidden>Background: live WebGL shader over frames from projects I worked on · <button class="foot__src" type="button" data-open="srcdlg">view source</button></p>
+<p class="foot__zero" hidden>You're here at 00:00.</p>
+</div>
+</footer>
+
+<nav class="bbar" aria-label="Quick contact">
+<a class="bbar__b bbar__b--sel" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
+<a class="bbar__b" href="mailto:kartakcvc@gmail.com"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span></a>
+<a class="bbar__b" href="#reel" data-open="vdlg" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span>Reel</span></a>
+</nav>
+
+<dialog id="pause" class="pause" aria-label="Menu">
+<div class="spine" aria-hidden="true"><span class="spine__t">Kartak</span></div>
+<nav class="cmds cmds--pause" aria-label="Sections"></nav>
+<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Watch the showreel</p><p class="tip__s" data-tip-out="s">Gameplay &amp; real-time VFX · tech-art demo</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
+<form method="dialog" class="pause__x"><button class="btn btn--line has-shape pause__back" type="submit"><span class="shape"></span><span class="tri tri--l"></span><span>Back</span><kbd aria-hidden="true">Esc</kbd></button></form>
+</dialog>
+
+<dialog id="lb" class="lb" aria-label="Image viewer">
+<span class="lb__num" aria-hidden="true" data-lb="num">01</span>
+<figure class="lb__fig"><img class="lb__img" data-lb="img" alt="" width="1280" height="720" decoding="async"><figcaption class="lb__cap"><b data-lb="cap"></b> <span data-lb="sub"></span></figcaption></figure>
+<p class="lb__count"><span data-lb="i">1</span> / 6</p>
+<button class="lb__nav lb__nav--prev" type="button" data-lb="prev" aria-label="Previous image"></button>
+<button class="lb__nav lb__nav--next" type="button" data-lb="next" aria-label="Next image"></button>
+<form method="dialog" class="dlgx"><button class="dlgx__b" type="submit" aria-label="Close image viewer" autofocus><span aria-hidden="true">✕</span></button></form>
+</dialog>
+
+<dialog id="vdlg" class="vdlg" aria-labelledby="vdlg-t">
+<p class="micro vdlg__t" id="vdlg-t">Showreel</p>
+<div class="vdlg__frame" data-vdlg="frame"></div>
+<form method="dialog" class="dlgx"><button class="dlgx__b" type="submit" aria-label="Close video" autofocus><span aria-hidden="true">✕</span></button></form>
+</dialog>
+
+<dialog id="srcdlg" class="srcdlg" aria-labelledby="srcdlg-t">
+<p class="micro srcdlg__t" id="srcdlg-t">Background shader · GLSL ES 1.0</p>
+<pre class="srcdlg__pre" tabindex="0" aria-label="Background shader source"><code id="srcdlg-code"></code></pre>
+<button class="btn--copy" type="button" data-copy-target="#srcdlg-code" data-announce="Code copied" hidden>Copy</button>
+<form method="dialog" class="dlgx"><button class="dlgx__b" type="submit" aria-label="Close source viewer" autofocus><span aria-hidden="true">✕</span></button></form>
+</dialog>
+
+<div class="sr-live vh" aria-live="polite"></div>
+<div class="flash" aria-hidden="true"></div>
+<svg class="wipe" aria-hidden="true"><path class="wipe__navy" d=""/><path class="wipe__ultra" d=""/></svg>
+
 </body>
 </html>
