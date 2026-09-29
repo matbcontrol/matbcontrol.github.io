@@ -324,16 +324,15 @@ $pDuo640 = Join-Path $imgDir 'contact-duo-640.jpg'
 Add-Manifest $pDuo640 $w640 $h640
 $resized640.Dispose(); $duo640.Dispose()
 
-Write-Host "== 3/5 og.jpg (image5 duotone, cover-crop 70%/40%, dark-left gradient) =="
-$duoFull = [SeaAssets.Pipeline]::Duotone($src5, '#01023C', '#6AE6FA')
-$og = [SeaAssets.Pipeline]::CoverCrop($duoFull, 1200, 630, 0.70, 0.40)
-[SeaAssets.Pipeline]::DarkLeftGradient($og, 0.62, 0.60)
-$pOg = Join-Path $assetsDir 'og.jpg'
-[SeaAssets.Pipeline]::SaveJpeg($og, $pOg, 85)
-Add-Manifest $pOg 1200 630
-$duoFull.Dispose(); $og.Dispose(); $src5.Dispose()
+Write-Host "== 3/5 link preview: skipped =="
+# The link preview (assets/og-site.jpg, 1200x630) is a screenshot of the page itself, not a project frame:
+#   node tools/serve.js 8080
+#   node tools/shot.mjs --url "http://127.0.0.1:8080/?og=1" --w 1600 --h 840 --wait 6000 --out <dir> --prefix og
+# then downscale the PNG to 1200x630 JPEG q85. When it changes, save it under a NEW file name and update
+# og:image in index.html, otherwise Telegram/Discord keep showing their cached copy.
+$src5.Dispose()
 
-Write-Host "== 4/5 sea stills (placeholders - deep/blue/red<-image2, night<-image3) =="
+Write-Host "== 4/5 sea stills (placeholders only where missing; the real ones are baked from tools/bake.html) =="
 $src2 = [SeaAssets.Pipeline]::LoadBitmap((Join-Path $workDir 'image2.png'))
 $src3 = [SeaAssets.Pipeline]::LoadBitmap((Join-Path $workDir 'image3.png'))
 
@@ -341,15 +340,13 @@ foreach ($name in @('deep','blue','red')) {
     $rgb = Ramp-Channels $ramps[$name]
     $still = [SeaAssets.Pipeline]::RenderStill($src2, 960, 540, 240, 1.25, 0.04, $rgb[0], $rgb[1], $rgb[2])
     $p = Join-Path $seaDir ("still-{0}.jpg" -f $name)
-    [SeaAssets.Pipeline]::SaveJpeg($still, $p, 75)
-    Add-Manifest $p 960 540
+    if (-not (Test-Path $p)) { [SeaAssets.Pipeline]::SaveJpeg($still, $p, 75); Add-Manifest $p 960 540 }
     $still.Dispose()
 }
 $rgbNight = Ramp-Channels $ramps['night']
 $stillNight = [SeaAssets.Pipeline]::RenderStill($src3, 960, 540, 240, 1.30, 0.05, $rgbNight[0], $rgbNight[1], $rgbNight[2])
 $pNight = Join-Path $seaDir 'still-night.jpg'
-[SeaAssets.Pipeline]::SaveJpeg($stillNight, $pNight, 75)
-Add-Manifest $pNight 960 540
+if (-not (Test-Path $pNight)) { [SeaAssets.Pipeline]::SaveJpeg($stillNight, $pNight, 75); Add-Manifest $pNight 960 540 }
 $stillNight.Dispose()
 $src2.Dispose(); $src3.Dispose()
 
