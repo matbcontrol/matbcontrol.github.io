@@ -357,6 +357,7 @@ main{display:block}
 .pcard--aura{grid-column:1/8}
 .pcard--reday{grid-column:8/13;margin-top:40px}
 .pgrid--req .pcard{grid-column:span 4}
+.pgrid--req2 .pcard{grid-column:span 6}
 .pgrid__label{margin:88px 0 36px;color:var(--aqua);font-size:.875rem}
 .pcard{--pc-fill:var(--aqua-card);--pc-t:var(--ink);--pc-s:var(--navy);--pc-type:var(--navy);position:relative;isolation:isolate;display:flex;flex-direction:column;gap:14px;padding:20px 30px 30px;color:var(--pc-t);rotate:calc(var(--tilt,0deg) * var(--tk))}
 .pcard>.shape{--fill:var(--pc-fill);--cut:var(--cut-m);--sx:10px;--sy:12px;--sc:var(--abyss)}
@@ -365,6 +366,7 @@ main{display:block}
 .pcard:is(:hover,:focus-within){--pc-fill:var(--white);--pc-t:var(--ink);--pc-s:var(--navy);z-index:2;rotate:0deg}
 .pcard:is(:hover,:focus-within)>.shape{--line:var(--ink);--ec:var(--sel);--ex:3px;--ey:3px;--sx:16px;--sy:20px;--sc:var(--ink)}
 .pcard--apoth .pcard__fig img{filter:brightness(3) url(#fx-blue)}
+.pcard--victim .pcard__fig img{filter:brightness(1.9) url(#fx-blue)}
 .pcard:is(:hover,:focus-within) .pcard__fig img{filter:none}
 .pcard:is(:hover,:focus-within) .pcard__cur{display:block}
 .pcard__cur{left:-20px;top:36px;z-index:3}
@@ -437,6 +439,20 @@ main{display:block}
 .bd__res{margin-top:22px;padding:12px 18px;font:italic 600 1rem/1.4 var(--f-body);--slab-sh:var(--night-band)}
 .bd__off{margin-top:18px;font:italic 600 .9375rem/1.4 var(--f-body);color:var(--night-neon)}
 html[data-sea="gl"] .bd__off{display:none}
+/* GUIDES: write-ups on r/Unity3D, reuses the project card */
+.pgrid--guides{margin-top:12px}
+.pgrid--guides .pcard{grid-column:span 6}
+.pcard--guide .pcard__arcana{opacity:1;letter-spacing:.1em}
+.guides__all{margin-top:34px;font:italic 600 .9375rem/1.4 var(--f-body)}
+.guides__all a{color:var(--aqua)}
+/* project card extras: stats under the tags (Reday-1), phone screenshot (Cyber Abyss) */
+.pcard__stats--row{gap:32px;margin:2px 0 0}
+.pcard__stats--row .stat dt{color:var(--pc-s)}
+.pcard__stats--row .stat dd{font-size:clamp(2rem,1.4rem + 1.6vw,3rem);color:var(--pc-t)}
+.pcard__type--phone{grid-template-columns:minmax(0,1fr) auto;column-gap:4%;padding:0 7% 0 3%}
+.pcard__type--phone .pcard__glyph{width:100%}
+.pcard__phone{height:108%;width:auto;margin:-4% 0;rotate:4deg;border:3px solid var(--white);box-shadow:8px 10px 0 var(--ink);filter:url(#fx-blue)}
+.pcard:is(:hover,:focus-within) .pcard__phone{filter:none}
 .code{position:relative;margin:20px 0 0;background:rgb(10 20 10 / .92);border:2px solid var(--night-band);border-radius:var(--r-code);min-width:0}
 .code__tag{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgb(30 133 7 / .7);font-weight:800;font-stretch:90%;font-size:.8125rem;letter-spacing:.04em;text-transform:none;color:var(--night-pale)}
 .code__tag .micro{display:inline-flex;padding:2px 8px;background:var(--night-band);color:var(--white)}

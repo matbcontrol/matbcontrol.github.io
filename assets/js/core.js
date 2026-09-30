@@ -96,7 +96,7 @@ function chrome() {
 }
 function setCur(s) {
   if (s === cur) return; cur = s; ds.mode = s.dataset.mode || 'blue';
-  const h = '#' + s.id, rl = $(`.rail__i[href="${h}"]`), lab = (rl && rl.dataset.label) || '';
+  const h = s.dataset.nav || '#' + s.id, rl = $(`.rail__i[href="${h}"]`), lab = s.dataset.label || (rl && rl.dataset.label) || '';
   $$('.rail__i,.cmds--pause .cmd__a').forEach(a => a.getAttribute('href') == h ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
   put('sec', lab); txt($('[data-rail="label"]'), lab.replace(/^\d+\s*/, ''));
   bench && s.id != 'tech-art' ? benchReset() : syncSea();
