@@ -54,7 +54,7 @@
 <a class="hud__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span></a>
 <span class="hud__sec" aria-hidden="true" data-hud="sec"></span>
 <div class="hud__cal" aria-hidden="true"><span class="hud__date" data-hud="date"></span><span class="hud__dow" data-hud="dow"></span><span class="hud__slot" data-hud="slot"></span></div>
-<button class="hud__moon" type="button" aria-pressed="false" aria-label="Moon. Toggle 00:00 mode"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle class="hud__moon-base" r="20"/><path class="hud__moon-lit" d=""/></svg></button>
+<button class="hud__moon" type="button" aria-pressed="false" aria-label="Moon. Toggle 00:00 mode"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle class="hud__moon-base" r="20"/><path class="hud__moon-lit" d=""/></svg><span class="hud__moon-t" aria-hidden="true">00:00</span></button>
 <p class="hud__tz">Tbilisi · GMT+4<span data-hud="tbs"></span></p>
 <p class="hud__status">Open to work<span class="hud__rr"> · Relocation ready</span></p>
 <ul class="hud__icons">
@@ -69,8 +69,8 @@
 <a class="rail__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span><span>Menu</span><kbd aria-hidden="true">Esc</kbd></a>
 <span class="rail__label" aria-hidden="true" data-rail="label"></span>
 <ol class="rail__list">
-<li><a class="rail__i" href="#reel" data-label="01 Reel"><span aria-hidden="true">1</span><span class="vh">Reel</span></a></li>
-<li><a class="rail__i" href="#projects" data-label="02 Projects"><span aria-hidden="true">2</span><span class="vh">Projects</span></a></li>
+<li><a class="rail__i" href="#projects" data-label="01 Projects"><span aria-hidden="true">1</span><span class="vh">Projects</span></a></li>
+<li><a class="rail__i" href="#reel" data-label="02 Reel"><span aria-hidden="true">2</span><span class="vh">Reel</span></a></li>
 <li><a class="rail__i" href="#tech-art" data-label="03 Tech art"><span aria-hidden="true">3</span><span class="vh">Tech art</span></a></li>
 <li><a class="rail__i" href="#gallery" data-label="04 Gallery"><span aria-hidden="true">4</span><span class="vh">Gallery</span></a></li>
 <li><a class="rail__i" href="#about" data-label="05 About"><span aria-hidden="true">5</span><span class="vh">About</span></a></li>
@@ -105,28 +105,29 @@
 <p class="idbox__short">Unity Developer &amp; Technical Artist — in game development since 2021.</p>
 <a class="proofbar has-shape" href="https://store.steampowered.com/app/4754800/Aura_Farming/" target="_blank" rel="noopener"><span class="shape"></span><span class="proofbar__t">Aura Farming</span><span class="proofbar__sep"> · </span><span class="proofbar__s">Live on Steam</span><span class="proofbar__sep"> · </span><span class="proofbar__n">120+ reviews · Mostly Positive</span><span class="proofbar__ext" aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
 <div class="idbox__cta">
-<a class="btn btn--cmd has-shape" href="#reel" data-open="vdlg" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span><span class="btn__x">Watch </span>showreel</span></a>
-<a class="btn btn--line has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
+<a class="btn btn--cmd has-shape" href="#projects"><span class="shape"></span><span>Projects</span><span aria-hidden="true">↓</span></a>
+<a class="btn btn--line has-shape" href="#reel" data-open="vdlg" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span><span class="btn__x">Watch </span>showreel</span></a>
+<a class="btn btn--line has-shape btn--tg" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
 <a class="btn btn--line has-shape btn--cv" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener"><span class="shape"></span><span>CV · PDF</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
 </div>
-<p class="idbox__mail">or email <a href="mailto:kartakcvc@gmail.com">kartakcvc@gmail.com</a> <button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></p>
+<p class="idbox__mail"><span class="idbox__tg">Telegram <a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">@MATb_CONTROL<span class="vh"> (opens in new tab)</span></a> or email</span><span class="idbox__or">or email</span> <a href="mailto:kartakcvc@gmail.com">kartakcvc@gmail.com</a> <button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></p>
 </div>
 
 <nav class="cmds cmds--hero" id="menu" aria-label="Sections">
 <ol>
-<li class="cmd is-sel" style="--i:1;--r:-18deg;--x:0px;--c:var(--aqua)"><a class="cmd__a" href="#reel" data-i="1" data-frame="3" data-tip="Watch the showreel" data-sub="Gameplay &amp; real-time VFX · tech-art demo"><span class="cmd__cur"></span><span class="cmd__t">Reel</span><span class="cmd__t cmd__t--r" aria-hidden="true">Reel</span><span class="cmd__t cmd__t--w" aria-hidden="true">Reel</span></a></li>
-<li class="cmd" style="--i:2;--r:-9deg;--x:28px;--c:var(--aqua-2)"><a class="cmd__a" href="#projects" data-i="2" data-frame="2" data-tip="Browse projects" data-sub="Aura Farming live on Steam · Reday-1 · jam games"><span class="cmd__cur"></span><span class="cmd__t">Projects</span><span class="cmd__t cmd__t--r" aria-hidden="true">Projects</span><span class="cmd__t cmd__t--w" aria-hidden="true">Projects</span></a></li>
-<li class="cmd" style="--i:3;--r:-11deg;--x:12px;--c:var(--aqua-3)"><a class="cmd__a" href="#tech-art" data-i="3" data-frame="3" data-tip="Read the shader breakdowns" data-sub="WindCore.hlsl · URP shaders · guides"><span class="cmd__cur"></span><span class="cmd__t">Tech art</span><span class="cmd__t cmd__t--r" aria-hidden="true">Tech art</span><span class="cmd__t cmd__t--w" aria-hidden="true">Tech art</span></a></li>
-<li class="cmd" style="--i:4;--r:-14deg;--x:40px;--c:var(--aqua-card)"><a class="cmd__a" href="#gallery" data-i="4" data-frame="4" data-tip="View screenshots" data-sub="6 frames: lighting, VFX, environments"><span class="cmd__cur"></span><span class="cmd__t">Gallery</span><span class="cmd__t cmd__t--r" aria-hidden="true">Gallery</span><span class="cmd__t cmd__t--w" aria-hidden="true">Gallery</span></a></li>
-<li class="cmd" style="--i:5;--r:2deg;--x:20px;--c:var(--aqua)"><a class="cmd__a" href="#about" data-i="5" data-frame="6" data-tip="Check status" data-sub="Tbilisi, Georgia · open to work · relocation ready"><span class="cmd__cur"></span><span class="cmd__t">About</span><span class="cmd__t cmd__t--r" aria-hidden="true">About</span><span class="cmd__t cmd__t--w" aria-hidden="true">About</span></a></li>
-<li class="cmd" style="--i:6;--r:-7deg;--x:52px;--c:var(--aqua-2)"><a class="cmd__a" href="#experience" data-i="6" data-frame="1" data-tip="Review experience" data-sub="Sep 2021 → now · 3 roles"><span class="cmd__cur"></span><span class="cmd__t">Experience</span><span class="cmd__t cmd__t--r" aria-hidden="true">Experience</span><span class="cmd__t cmd__t--w" aria-hidden="true">Experience</span></a></li>
-<li class="cmd" style="--i:7;--r:-13deg;--x:30px;--c:var(--aqua-3)"><a class="cmd__a" href="#skills" data-i="7" data-frame="3" data-tip="See the toolbox" data-sub="C# · Unity · HLSL · Shader Graph · VFX · tools"><span class="cmd__cur"></span><span class="cmd__t">Skills</span><span class="cmd__t cmd__t--r" aria-hidden="true">Skills</span><span class="cmd__t cmd__t--w" aria-hidden="true">Skills</span></a></li>
-<li class="cmd" style="--i:8;--r:-5deg;--x:60px;--c:var(--aqua-card)"><a class="cmd__a" href="#education" data-i="8" data-frame="4" data-tip="Education &amp; languages" data-sub="Master's · Bachelor · English B2"><span class="cmd__cur"></span><span class="cmd__t">Education</span><span class="cmd__t cmd__t--r" aria-hidden="true">Education</span><span class="cmd__t cmd__t--w" aria-hidden="true">Education</span></a></li>
-<li class="cmd" style="--i:9;--r:-10deg;--x:36px;--c:var(--aqua)"><a class="cmd__a" href="#contact" data-i="9" data-frame="5" data-tip="Get in touch" data-sub="Telegram @MATb_CONTROL · email"><span class="cmd__cur"></span><span class="cmd__t">Contact</span><span class="cmd__t cmd__t--r" aria-hidden="true">Contact</span><span class="cmd__t cmd__t--w" aria-hidden="true">Contact</span></a></li>
+<li class="cmd is-sel" style="--i:1;--r:-8deg;--x:0px;--c:var(--aqua)"><a class="cmd__a" href="#projects" data-i="1" data-frame="2" data-tip="Browse projects" data-sub="Aura Farming live on Steam · Reday-1 · jam games"><span class="cmd__cur"></span><span class="cmd__t">Projects</span></a></li>
+<li class="cmd" style="--i:2;--r:-5deg;--x:28px;--c:var(--aqua-2)"><a class="cmd__a" href="#reel" data-i="2" data-frame="3" data-tip="Watch the showreel" data-sub="Gameplay &amp; real-time VFX · tech-art demo"><span class="cmd__cur"></span><span class="cmd__t">Reel</span></a></li>
+<li class="cmd" style="--i:3;--r:-11deg;--x:12px;--c:var(--aqua-3)"><a class="cmd__a" href="#tech-art" data-i="3" data-frame="3" data-tip="Read the shader breakdowns" data-sub="WindCore.hlsl · URP shaders · guides"><span class="cmd__cur"></span><span class="cmd__t">Tech art</span></a></li>
+<li class="cmd" style="--i:4;--r:-14deg;--x:40px;--c:var(--aqua-card)"><a class="cmd__a" href="#gallery" data-i="4" data-frame="4" data-tip="View screenshots" data-sub="6 frames: lighting, VFX, environments"><span class="cmd__cur"></span><span class="cmd__t">Gallery</span></a></li>
+<li class="cmd" style="--i:5;--r:2deg;--x:20px;--c:var(--aqua)"><a class="cmd__a" href="#about" data-i="5" data-frame="6" data-tip="Check status" data-sub="Tbilisi, Georgia · open to work · relocation ready"><span class="cmd__cur"></span><span class="cmd__t">About</span></a></li>
+<li class="cmd" style="--i:6;--r:-7deg;--x:52px;--c:var(--aqua-2)"><a class="cmd__a" href="#experience" data-i="6" data-frame="1" data-tip="Review experience" data-sub="Sep 2021 → now · 3 roles"><span class="cmd__cur"></span><span class="cmd__t">Experience</span></a></li>
+<li class="cmd" style="--i:7;--r:-13deg;--x:30px;--c:var(--aqua-3)"><a class="cmd__a" href="#skills" data-i="7" data-frame="3" data-tip="See the toolbox" data-sub="C# · Unity · HLSL · Shader Graph · VFX · tools"><span class="cmd__cur"></span><span class="cmd__t">Skills</span></a></li>
+<li class="cmd" style="--i:8;--r:-5deg;--x:60px;--c:var(--aqua-card)"><a class="cmd__a" href="#education" data-i="8" data-frame="4" data-tip="Education &amp; languages" data-sub="Master's · Bachelor · English B2"><span class="cmd__cur"></span><span class="cmd__t">Education</span></a></li>
+<li class="cmd" style="--i:9;--r:-10deg;--x:36px;--c:var(--aqua)"><a class="cmd__a" href="#contact" data-i="9" data-frame="5" data-tip="Get in touch" data-sub="Telegram @MATb_CONTROL · email"><span class="cmd__cur"></span><span class="cmd__t">Contact</span></a></li>
 </ol>
 </nav>
 
-<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Watch the showreel</p><p class="tip__s" data-tip-out="s">Gameplay &amp; real-time VFX · tech-art demo</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
+<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Browse projects</p><p class="tip__s" data-tip-out="s">Aura Farming live on Steam · Reday-1 · jam games</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
 <p class="prompts" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd> Select · <kbd>Enter</kbd> Open · <kbd>Esc</kbd> Menu</p>
 <p class="seatag" hidden><span class="seatag__dot"></span>Live shader · Frame: <span data-out="sea-frame">Night atmosphere</span> · <span data-out="sea-fps">--</span> FPS · <button class="seatag__src" type="button" data-open="srcdlg">View source</button></p>
 
@@ -136,30 +137,8 @@
 </div></div>
 </section>
 
-<section id="reel" class="sec sec--reel" data-mode="red" data-frame="2" aria-labelledby="h-reel">
-<svg class="seam seam--diag" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,96 1440,0 1440,96"/></svg>
-<div class="sec__deco" aria-hidden="true"><span class="sh__idx">1</span><span class="sh__wm rv" data-rv="wm">Reel</span><div class="reel__band"><span>Showreel</span></div></div>
-<div class="sec__in">
-<header class="sh"><h2 id="h-reel" class="rv" data-rv="h2" tabindex="-1">Showreel</h2><p class="sh__tip">Gameplay &amp; real-time VFX · tech-art demo<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
-<div class="reel" id="work">
-<figure class="vid vid--main rv" data-rv="panel">
-<div class="vid__frame"><span class="vid__diamond"></span>
-<div class="yt" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><img class="yt__poster" src="https://i.ytimg.com/vi/Ww_pdifttOQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/Ww_pdifttOQ/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=Ww_pdifttOQ" target="_blank" rel="noopener" data-yt="Ww_pdifttOQ"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Gameplay &amp; VFX showreel</span><span class="vh nt"> (opens in new tab)</span></a></div>
-</div>
-<figcaption class="vid__cap"><b>Showreel</b> — gameplay &amp; real-time VFX</figcaption>
-</figure>
-<figure class="vid vid--demo rv" data-rv="panel">
-<div class="vid__frame">
-<div class="yt" data-yt="4Y15WEwHLWU" data-title="Tech-art demo"><img class="yt__poster" src="https://i.ytimg.com/vi/4Y15WEwHLWU/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/4Y15WEwHLWU/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=4Y15WEwHLWU" target="_blank" rel="noopener" data-yt="4Y15WEwHLWU"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Tech-art demo</span><span class="vh nt"> (opens in new tab)</span></a></div>
-</div>
-<figcaption class="vid__cap"><b>Tech-art demo</b> — scenes &amp; transitions</figcaption>
-</figure>
-</div>
-</div>
-</section>
-
 <section id="projects" class="sec sec--projects" data-mode="blue" data-frame="5" aria-labelledby="h-projects">
-<div class="sec__deco" aria-hidden="true"><span class="sh__idx">2</span><span class="sh__wm rv" data-rv="wm">Projects</span></div>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">1</span><span class="sh__wm rv" data-rv="wm">Projects</span></div>
 <div class="sec__in">
 <header class="sh"><h2 id="h-projects" class="rv" data-rv="h2" tabindex="-1">Projects</h2><p class="sh__tip">Aura Farming live on Steam · Reday-1 · jam games · more on request<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
 
@@ -197,6 +176,7 @@
 <p class="pcard__credit">Founder &amp; Lead Game Developer, Homo-Ludens</p>
 <div class="pcard__cta">
 <a class="btn btn--cmd has-shape" href="https://store.steampowered.com/app/3595410/REday_1/" target="_blank" rel="noopener"><span class="shape"></span><span>Steam page</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+<a class="btn btn--line has-shape" href="https://www.youtube.com/watch?v=4vHIMbuXXbs" target="_blank" rel="noopener" data-open="vdlg" data-yt="4vHIMbuXXbs" data-title="REday -1 Trailer"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span>Trailer</span></a>
 <a class="btn btn--line has-shape" href="https://www.reddit.com/r/IndieGameDevs/comments/1pkqv9b/about_my_game_and_eternity/" target="_blank" rel="noopener"><span class="shape"></span><span>Devlog</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
 </div>
 </article>
@@ -225,8 +205,7 @@
 <ul class="pcard__tags"><li>Game jam</li><li>Programmer</li><li>2D</li></ul>
 <p class="pcard__desc">2D pixel-art horror story with dialogue scenes, made for Halloween Game Jam 2023.</p>
 <p class="pcard__credit">Programmer</p>
-<div class="pcard__cta"><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=The%20Path%20of%20the%20Victim%20%E2%80%94%20build"><span class="shape"></span><span>Ask for a build</span></a></div>
-<p class="pcard__stamp">Build on request</p>
+<div class="pcard__cta"><a class="btn btn--cmd has-shape" href="game-jams.html#victim"><span class="shape"></span><span>Project page</span><span aria-hidden="true">→</span><span class="vh">: The Path of the Victim</span></a></div>
 </article>
 
 <article class="pcard pcard--req pcard--jam has-shape rv" data-rv="card" style="--tilt:-0.6deg" aria-labelledby="p-jam">
@@ -235,12 +214,12 @@
 <div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">0 · Fool</span><h3 id="p-jam">More jam prototypes</h3></div>
 <ul class="pcard__tags"><li>Game Jams</li><li>Prototyping</li><li>Solo</li></ul>
 <p class="pcard__desc">More playable jam demos — including a full prototype designed and built solo within 12 hours.</p>
-<div class="pcard__cta"><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Jam%20prototypes%20%E2%80%94%20selection"><span class="shape"></span><span>Ask for the selection</span></a></div>
+<div class="pcard__cta"><a class="btn btn--cmd has-shape" href="game-jams.html#solo"><span class="shape"></span><span>Project page</span><span aria-hidden="true">→</span><span class="vh">: game jams</span></a><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Jam%20prototypes%20%E2%80%94%20selection"><span class="shape"></span><span>Ask for the selection</span></a></div>
 <p class="pcard__stamp">Selection on request</p>
 </article>
 </div>
 
-<p class="micro pgrid__label">On request<span class="rule"></span></p>
+<p class="micro pgrid__label">Studio &amp; freelance<span class="rule"></span></p>
 <div class="pgrid pgrid--req pgrid--req2">
 <article class="pcard pcard--req pcard--apoth has-shape rv" data-rv="card" style="--tilt:-1deg" aria-labelledby="p-apoth">
 <span class="shape"></span><span class="pcard__cur"></span>
@@ -248,8 +227,7 @@
 <div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">XVII · Star</span><h3 id="p-apoth">Apothecary's Dungeon</h3></div>
 <ul class="pcard__tags"><li>Unity</li><li>URP</li><li>HLSL</li></ul>
 <p class="pcard__desc">Stylized top-down RPG, in development. Custom grass rendering system — GPU instancing (DrawMeshInstancedIndirect), chunked loading, wind vertex animation — plus URP water &amp; vegetation shaders and custom lighting.</p>
-<div class="pcard__cta"><a class="btn btn--line has-shape" href="#tech-art"><span class="shape"></span><span>See the grass shader</span><span aria-hidden="true">↓</span></a></div>
-<p class="pcard__stamp">Details on request</p>
+<div class="pcard__cta"><a class="btn btn--cmd has-shape" href="apothecarys-dungeon.html"><span class="shape"></span><span>Project page</span><span aria-hidden="true">→</span><span class="vh">: Apothecary's Dungeon</span></a><a class="btn btn--line has-shape" href="#tech-art"><span class="shape"></span><span>See the grass shader</span><span aria-hidden="true">↓</span></a></div>
 </article>
 
 <article class="pcard pcard--req pcard--cyber has-shape rv" data-rv="card" style="--tilt:1.5deg" aria-labelledby="p-cyber">
@@ -258,9 +236,30 @@
 <div class="pcard__head"><span class="pcard__arcana" aria-hidden="true">X · Wheel</span><h3 id="p-cyber">Cyber Abyss</h3></div>
 <ul class="pcard__tags"><li>Unity</li><li>Client-Server</li><li>Live</li></ul>
 <p class="pcard__desc">Client-server architecture, progression and microtransaction systems for an online action title, designed to extend cleanly with new online features.</p>
-<div class="pcard__cta"><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Cyber%20Abyss%20%E2%80%94%20details"><span class="shape"></span><span>Ask about it</span></a></div>
-<p class="pcard__stamp">Details on request</p>
+<div class="pcard__cta"><a class="btn btn--cmd has-shape" href="cyber-abyss.html"><span class="shape"></span><span>Project page</span><span aria-hidden="true">→</span><span class="vh">: Cyber Abyss</span></a><a class="btn btn--line has-shape" href="mailto:kartakcvc@gmail.com?subject=Cyber%20Abyss%20%E2%80%94%20details"><span class="shape"></span><span>Ask about it</span></a></div>
 </article>
+</div>
+</div>
+</section>
+
+<section id="reel" class="sec sec--reel" data-mode="red" data-frame="2" aria-labelledby="h-reel">
+<svg class="seam seam--diag" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,96 1440,0 1440,96"/></svg>
+<div class="sec__deco" aria-hidden="true"><span class="sh__idx">2</span><span class="sh__wm rv" data-rv="wm">Reel</span><div class="reel__band"><span>Showreel</span></div></div>
+<div class="sec__in">
+<header class="sh"><h2 id="h-reel" class="rv" data-rv="h2" tabindex="-1">Showreel</h2><p class="sh__tip">Gameplay &amp; real-time VFX · tech-art demo<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<div class="reel" id="work">
+<figure class="vid vid--main rv" data-rv="panel">
+<div class="vid__frame"><span class="vid__diamond"></span>
+<div class="yt" data-yt="Ww_pdifttOQ" data-title="Gameplay &amp; VFX showreel"><img class="yt__poster" src="https://i.ytimg.com/vi/Ww_pdifttOQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/Ww_pdifttOQ/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=Ww_pdifttOQ" target="_blank" rel="noopener" data-yt="Ww_pdifttOQ"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Gameplay &amp; VFX showreel</span><span class="vh nt"> (opens in new tab)</span></a></div>
+</div>
+<figcaption class="vid__cap"><b>Showreel</b> — gameplay &amp; real-time VFX</figcaption>
+</figure>
+<figure class="vid vid--demo rv" data-rv="panel">
+<div class="vid__frame">
+<div class="yt" data-yt="4Y15WEwHLWU" data-title="Tech-art demo"><img class="yt__poster" src="https://i.ytimg.com/vi/4Y15WEwHLWU/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/4Y15WEwHLWU/hqdefault.jpg'" width="1280" height="720" alt="" loading="lazy" decoding="async"><a class="yt__play" href="https://www.youtube.com/watch?v=4Y15WEwHLWU" target="_blank" rel="noopener" data-yt="4Y15WEwHLWU"><span class="yt__disc"></span><span class="yt__lbl">Play</span><span class="vh"> Tech-art demo</span><span class="vh nt"> (opens in new tab)</span></a></div>
+</div>
+<figcaption class="vid__cap"><b>Tech-art demo</b> — scenes &amp; transitions</figcaption>
+</figure>
 </div>
 </div>
 </section>
@@ -572,7 +571,7 @@ worldPos.y  -= (<span class="tn">1.0</span> - <span class="tk">sqrt</span>(<span
 <dialog id="pause" class="pause" aria-label="Menu">
 <div class="spine" aria-hidden="true"><span class="spine__t">Kartak</span></div>
 <nav class="cmds cmds--pause" aria-label="Sections"></nav>
-<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Watch the showreel</p><p class="tip__s" data-tip-out="s">Gameplay &amp; real-time VFX · tech-art demo</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
+<div class="tip" aria-hidden="true"><p class="tip__t" data-tip-out="t">Browse projects</p><p class="tip__s" data-tip-out="s">Aura Farming live on Steam · Reday-1 · jam games</p><p class="micro tip__k">Command<span class="rule"></span></p></div>
 <form method="dialog" class="pause__x"><button class="btn btn--line has-shape pause__back" type="submit"><span class="shape"></span><span class="tri tri--l"></span><span>Back</span><kbd aria-hidden="true">Esc</kbd></button></form>
 </dialog>
 

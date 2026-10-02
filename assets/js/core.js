@@ -30,7 +30,7 @@ const S = W.SEA_STATE = { frame: +(hero && hero.dataset.frame) || 2, origin: [.5
   grade: 1, caustics: 1, pause: false, hero: true, motion: calm() ? 'reduced' : 'auto' };
 const sea = o => { Object.assign(S, o); W.dispatchEvent(new CustomEvent('sea', { detail: o })); };
 const halts = new Set(), halt = (k, v) => { halts[v ? 'add' : 'delete'](k); if (!!halts.size !== S.pause) sea({ pause: !!halts.size }); };
-let cur = null, bench = false, heroIn = true;
+let cur = null, bench = false, heroIn = !!hero; /* project pages have no hero: compact HUD from the start */
 const seaMode = s => ds.hour == 'zero' ? 'night' : s === hero ? 'blue' : { red: 'red', night: 'night' }[s.dataset.mode] || 'deep';
 function syncSea() {
   const s = cur || hero; if (!s || bench) return;
@@ -113,6 +113,27 @@ safe(() => {
     best && setCur(best);
   }, { rootMargin: '-49% 0px -50% 0px' });
   $$('main > section[id]').forEach(s => spy.observe(s));
+});
+safe(() => { hero || chrome(); });
+
+/* touch or narrow screens: the project card across the middle of the viewport gets the selected (untinted) look, no tap needed */
+safe(() => {
+  const cards = $$('.pcard'), mm = matchMedia('(hover: none), (max-width: 1023px)');
+  if (!IO || !cards.length) return;
+  const vis = new Set();
+  let last = null, fr = 0;
+  const pick = () => {
+    fr = 0;
+    const mid = innerHeight / 2; let best = null, bd = 1e9;
+    if (mm.matches) vis.forEach(c => { const r = c.getBoundingClientRect(), dd = Math.max(0, r.top - mid, mid - r.bottom); if (dd < bd) { bd = dd; best = c; } });
+    if (best === last) return;
+    last && tg(last, 'is-in', false); best && tg(best, 'is-in', true); last = best;
+  };
+  const soon = () => { fr = fr || raf(pick); };
+  const ob = io(es => { track(vis, es); soon(); }, { rootMargin: '-40% 0px -40% 0px' });
+  cards.forEach(c => ob.observe(c));
+  on(W, 'scroll', () => { (vis.size || last) && soon(); }, { passive: true });
+  mm.addEventListener && on(mm, 'change', soon);
 });
 
 /* command menus: hero + pause clone */

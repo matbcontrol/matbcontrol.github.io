@@ -2,12 +2,15 @@
 
 Portfolio of Aleksandr Kartak, Unity developer and technical artist: https://matbcontrol.github.io/
 
-The site is a single static page built as a game pause menu. The command menu on the first screen is the navigation. Behind it, a WebGL fragment shader recolours frames from projects I worked on into a five-step palette. There is no build step and no framework.
+The site is a static page built as a game pause menu, plus three project pages. The command menu on the first screen is the navigation. Behind it, a WebGL fragment shader recolours frames from projects I worked on into a five-step palette. There is no build step and no framework.
 
 ## Structure
 
 ```
 index.html          content, head script, dialogs, inline SVG sprite and filters
+cyber-abyss.html    project pages: same stylesheet, core.js, HUD and footer
+apothecarys-dungeon.html
+game-jams.html
 assets/css/site.css all styles
 assets/js/core.js   menu, HUD, dialogs, gallery, reveal, settings (deferred)
 assets/js/sea.js    WebGL background, injected by core.js when the page is idle

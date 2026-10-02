@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apothecary's Dungeon · Aleksandr Kartak, Unity Developer</title>
+<meta name="description" content="Apothecary's Dungeon is a stylized top-down RPG in development. I built its GPU-instanced grass system in Unity URP and one HLSL wind include that animates the vegetation.">
+<link rel="canonical" href="https://matbcontrol.github.io/apothecarys-dungeon.html">
+<meta name="theme-color" content="#06124F">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matbcontrol.github.io/apothecarys-dungeon.html">
+<meta property="og:title" content="Apothecary's Dungeon · Aleksandr Kartak">
+<meta property="og:description" content="Custom grass rendering with DrawMeshInstancedIndirect and chunked loading, and one shared HLSL wind include, for a stylized top-down RPG in Unity URP.">
+<meta property="og:image" content="https://matbcontrol.github.io/assets/work/image3-1280.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="Apothecary's Dungeon: custom GPU-instanced grass and vegetation">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<script>try{!function(h){var c=h.classList,a=function(k,v){h.setAttribute('data-'+k,v)},s={};c.remove('no-js');c.add('js');try{s=JSON.parse(localStorage.getItem('kartak.settings'))||{}}catch(e){}s.motion=='reduced'&&a('motion','reduced');s.shader=='off'&&a('sea','off');new Date().getHours()||a('hour','zero')}(document.documentElement)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,600..900&family=Asap:ital,wght@0,400..600;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@1,600..800&display=swap&text=0123456789%2F%2B%25.%3A%E2%86%92%E2%80%93">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/core.js" defer></script>
+</head>
+<body>
+<svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+<symbol id="i-tg" viewBox="0 0 24 24"><path fill="currentColor" d="M2.5 11.2 21.5 3.5 18 20.5l-5.8-4.1-2.9 3.2-.3-5L17.6 7 7.4 12.9z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 5.5h18v13H3zM3.5 6.5 12 13l8.5-6.5"/></symbol>
+<symbol id="i-gh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="5" r="2.2"/><circle cx="6" cy="19" r="2.2"/><circle cx="18" cy="7.5" r="2.2"/><path d="M6 7.2v9.6M18 9.7c0 4.3-7.5 3.3-11.2 7.3"/></g></symbol>
+<symbol id="i-cv" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 2.5h9.5L19 7v14.5H5zM14 2.5v5h5M8.5 12h7M8.5 15.5h7M8.5 19h4"/></symbol>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="sea" aria-hidden="true"></canvas>
+<div class="sea-fb" aria-hidden="true"></div>
+
+<header class="hud hud--compact">
+<a class="hud__back" href="index.html#projects"><span class="tri tri--l"></span><span>Projects</span></a>
+<div class="hud__cal" aria-hidden="true"><span class="hud__date" data-hud="date"></span><span class="hud__dow" data-hud="dow"></span><span class="hud__slot" data-hud="slot"></span></div>
+<button class="hud__moon" type="button" aria-pressed="false" aria-label="Moon. Toggle 00:00 mode"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle class="hud__moon-base" r="20"/><path class="hud__moon-lit" d=""/></svg><span class="hud__moon-t" aria-hidden="true">00:00</span></button>
+<p class="hud__status">Open to work<span class="hud__rr"> · Relocation ready</span></p>
+<ul class="hud__icons">
+<li><a class="btn btn--icon has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener" aria-label="Telegram @MATb_CONTROL (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="mailto:kartakcvc@gmail.com" aria-label="Email kartakcvc@gmail.com"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="https://github.com/matbcontrol" target="_blank" rel="noopener" aria-label="GitHub matbcontrol (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-gh"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-cv"/></svg></a></li>
+</ul>
+</header>
+
+<main id="main" tabindex="-1">
+<section id="apothecarys-dungeon" class="sec sec--pp" data-mode="blue" data-frame="3" data-label="Apothecary's Dungeon" aria-labelledby="h-pp">
+<div class="sec__deco" aria-hidden="true"><span class="sh__wm">Dungeon</span></div>
+<div class="sec__in">
+<nav class="pp__crumb" aria-label="Breadcrumb"><a href="index.html">Kartak</a><span aria-hidden="true">/</span><a href="index.html#projects">Projects</a><span aria-hidden="true">/</span><span aria-current="page">Apothecary's Dungeon</span></nav>
+<header class="sh"><h1 id="h-pp">Apothecary's Dungeon</h1><p class="sh__tip">Stylized top-down RPG · Unity URP<span class="rule"></span></p></header>
+
+<div class="pp">
+<figure class="pp__media"><video class="pp__video" src="assets/video/apothecarys-dungeon.mp4" poster="assets/video/apothecarys-dungeon-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="metadata" aria-label="Apothecary's Dungeon in-game capture: the character walks through dense grass at night, with flowers and a tree around"></video><figcaption class="pp__cap">In-game capture: grass, vegetation and lighting</figcaption><script>(function(){var v=document.currentScript.parentNode.querySelector('video'),r=document.documentElement;if(matchMedia('(prefers-reduced-motion: reduce)').matches||r.dataset.motion==='reduced'){v.removeAttribute('autoplay');v.pause();}})();</script></figure>
+<div class="pp__card has-shape">
+<span class="shape"></span>
+<p class="pcard__status">In development</p>
+<ul class="pcard__tags"><li>Unity</li><li>URP</li><li>HLSL</li></ul>
+<p class="pp__lead">A stylized top-down RPG made at Elven Empire, still in development. I built its custom grass rendering system for large environments and the shared wind shader that moves the vegetation.</p>
+<dl class="pp__facts">
+<div><dt>Studio</dt><dd>Elven Empire, remote</dd></div>
+<div><dt>Role</dt><dd>Unity Developer / Technical Artist</dd></div>
+<div><dt>Status</dt><dd>In development</dd></div>
+<div><dt>Stack</dt><dd>Unity, URP, HLSL</dd></div>
+</dl>
+</div>
+</div>
+
+<div class="pp__blocks">
+<article class="pp__block has-shape" aria-labelledby="b-grass">
+<span class="shape"></span>
+<p class="micro pp__tag">// Rendering</p>
+<h2 id="b-grass">Grass for large environments</h2>
+<p>The grass is drawn with GPU instancing through DrawMeshInstancedIndirect and loads in chunks. The blades move with vertex animation in the shader, driven by the shared wind include.</p>
+</article>
+<article class="pp__block pp__block--night has-shape" aria-labelledby="b-wind">
+<span class="shape"></span>
+<p class="micro pp__tag">// Tech Art · Shaders</p>
+<h2 id="b-wind">One wind core for all vegetation</h2>
+<p>A single include, <b>WindCore.hlsl</b>, drives the grass, the flowers and every other object that sways. Layered value noise (FBM) makes the steady breeze. A travelling gust wave adds bursts on top of it.</p>
+<p>Each vertex bends with the wind and then sags, which keeps a blade from stretching. The include depends only on <b>_Time</b>.</p>
+<figure class="code"><figcaption class="code__tag">WindCore.hlsl <span class="micro">HLSL</span></figcaption>
+<pre tabindex="0" aria-label="WindCore.hlsl excerpt"><code id="code-wind"><span class="tc">// travelling gust wave</span>
+<span class="tk">float</span> wavePhase = <span class="tk">dot</span>(worldPos.xz, dir) * <span class="tn">0.1</span> - time * <span class="tn">0.9</span>;
+<span class="tk">float</span> waveFront = <span class="tk">smoothstep</span>(<span class="tn">0.90</span>, <span class="tn">1.0</span>, <span class="tk">sin</span>(wavePhase));
+<span class="tk">float</span> totalWind = lightBreeze + waveMask * <span class="tn">0.7</span>
+                + windNoise * (lightBreeze + waveMask) * <span class="tn">0.4</span>;
+
+<span class="tc">// bend the blade, then sag so it never stretches</span>
+worldPos.xz += (dir + swirlDir) * bend;
+worldPos.y  -= (<span class="tn">1.0</span> - <span class="tk">sqrt</span>(<span class="tn">1.0</span> - bend * bend)) * heightT * scale;</code></pre>
+<button class="btn--copy" type="button" data-copy-target="#code-wind" data-announce="Code copied" hidden>Copy</button></figure>
+<ul class="chips chips--night"><li>HLSL</li><li>Value noise + FBM</li><li>Gust waves</li><li>Per-vertex bend</li><li>Distance fade</li><li>GPU instancing</li></ul>
+</article>
+<article class="pp__block has-shape" aria-labelledby="b-water">
+<span class="shape"></span>
+<p class="micro pp__tag">// Shaders · Lighting</p>
+<h2 id="b-water">Water, vegetation and light</h2>
+<p>Besides the grass, I wrote URP shaders for water and vegetation and built custom lighting for the game.</p>
+<div class="pcard__cta"><a class="btn btn--line has-shape" href="index.html#tech-art"><span class="shape"></span><span>Tech art on the main page</span><span aria-hidden="true">→</span></a></div>
+</article>
+</div>
+
+<aside class="fin pp__ask" aria-labelledby="h-ask">
+<div class="fin__sig">
+<p class="micro fin__eyebrow">Ask about it<span class="rule"></span></p>
+<h2 id="h-ask"><span class="fin__l1">Want more detail?</span> <span class="fin__l2">Ask me.</span></h2>
+<p class="fin__body">I'm happy to talk through the grass system or a similar rendering task. Telegram is the fastest way to reach me, and email works too.</p>
+</div>
+<ul class="fin__cmds">
+<li class="fcmd fcmd--main is-sel" style="--i:1;--r:-5deg"><a class="fcmd__a has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Telegram</span> <span class="fcmd__d">@MATb_CONTROL</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:2;--r:-3deg"><a class="fcmd__a has-shape" href="mailto:kartakcvc@gmail.com?subject=Apothecary%27s%20Dungeon"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Email</span> <span class="fcmd__d">kartakcvc@gmail.com</span></a><button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></li>
+</ul>
+</aside>
+
+<p class="pp__back"><a class="btn btn--line has-shape" href="index.html#projects"><span class="shape"></span><span class="tri tri--l"></span><span>Back to projects</span></a></p>
+</div>
+</section>
+</main>
+
+<footer class="foot">
+<div class="foot__in">
+<p class="micro foot__eod">End of day<span class="rule"></span> <span class="foot__date" data-hud="date"></span></p>
+<a class="btn btn--line has-shape foot__resume" href="index.html"><span class="shape"></span><span class="tri tri--l"></span><span>Main page</span></a>
+<p class="foot__copy">© <span data-year>2026</span> Aleksandr Kartak · Unity Developer &amp; Technical Artist</p>
+<ul class="foot__links"><li><a href="mailto:kartakcvc@gmail.com">Email</a></li><li><a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">Telegram<span class="vh"> (opens in new tab)</span></a></li><li><a href="https://github.com/matbcontrol" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in new tab)</span></a></li><li><a href="https://www.reddit.com/user/Murky-Goose-1291/" target="_blank" rel="noopener">Reddit<span class="vh"> (opens in new tab)</span></a></li><li><a href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener">CV (PDF)<span class="vh"> (opens in new tab)</span></a></li></ul>
+<div class="foot__set" hidden>
+<div class="seg" role="group" aria-label="Motion"><span class="micro" aria-hidden="true">Motion</span><button type="button" data-set="motion:auto" aria-pressed="true">Full</button><button type="button" data-set="motion:reduced" aria-pressed="false">Reduced</button></div>
+<div class="seg" role="group" aria-label="Shader"><span class="micro" aria-hidden="true">Shader</span><button type="button" data-set="shader:on" aria-pressed="true">On</button><button type="button" data-set="shader:off" aria-pressed="false">Off</button></div>
+</div>
+<p class="foot__zero" hidden>You're here at 00:00.</p>
+</div>
+</footer>
+
+<nav class="bbar" aria-label="Quick links">
+<a class="bbar__b bbar__b--sel" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
+<a class="bbar__b" href="mailto:kartakcvc@gmail.com?subject=Apothecary%27s%20Dungeon"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span></a>
+<a class="bbar__b" href="index.html#projects"><span class="tri tri--l" aria-hidden="true"></span><span>Projects</span></a>
+</nav>
+
+<div class="sr-live vh" aria-live="polite"></div>
+</body>
+</html>

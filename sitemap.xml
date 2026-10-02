@@ -2,6 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://matbcontrol.github.io/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+  <url>
+    <loc>https://matbcontrol.github.io/cyber-abyss.html</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+  <url>
+    <loc>https://matbcontrol.github.io/apothecarys-dungeon.html</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+  <url>
+    <loc>https://matbcontrol.github.io/game-jams.html</loc>
+    <lastmod>2026-10-01</lastmod>
   </url>
 </urlset>

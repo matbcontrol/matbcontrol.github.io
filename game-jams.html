@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Game jams · Aleksandr Kartak, Unity Developer</title>
+<meta name="description" content="Game jam work by Aleksandr Kartak: Dielevator!, built by a team of four in 72 hours, The Path of the Victim for Halloween Game Jam 2023, and a prototype built solo in 12 hours.">
+<link rel="canonical" href="https://matbcontrol.github.io/game-jams.html">
+<meta name="theme-color" content="#06124F">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matbcontrol.github.io/game-jams.html">
+<meta property="og:title" content="Game jams · Aleksandr Kartak">
+<meta property="og:description" content="Dielevator! placed #6 of 63 entries in Graphics at Indie Varvar's Jam #5. Also on the page: The Path of the Victim and a prototype built solo in 12 hours.">
+<meta property="og:image" content="https://matbcontrol.github.io/assets/work/jam-dielevator-1280.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="Dielevator! pixel-art platformer: the player on a platform between two industrial shafts, a generator below">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<script>try{!function(h){var c=h.classList,a=function(k,v){h.setAttribute('data-'+k,v)},s={};c.remove('no-js');c.add('js');try{s=JSON.parse(localStorage.getItem('kartak.settings'))||{}}catch(e){}s.motion=='reduced'&&a('motion','reduced');s.shader=='off'&&a('sea','off');new Date().getHours()||a('hour','zero')}(document.documentElement)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,600..900&family=Asap:ital,wght@0,400..600;1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@1,600..800&display=swap&text=0123456789%2F%2B%25.%3A%E2%86%92%E2%80%93">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/core.js" defer></script>
+</head>
+<body>
+<svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+<symbol id="i-tg" viewBox="0 0 24 24"><path fill="currentColor" d="M2.5 11.2 21.5 3.5 18 20.5l-5.8-4.1-2.9 3.2-.3-5L17.6 7 7.4 12.9z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 5.5h18v13H3zM3.5 6.5 12 13l8.5-6.5"/></symbol>
+<symbol id="i-gh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="5" r="2.2"/><circle cx="6" cy="19" r="2.2"/><circle cx="18" cy="7.5" r="2.2"/><path d="M6 7.2v9.6M18 9.7c0 4.3-7.5 3.3-11.2 7.3"/></g></symbol>
+<symbol id="i-cv" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 2.5h9.5L19 7v14.5H5zM14 2.5v5h5M8.5 12h7M8.5 15.5h7M8.5 19h4"/></symbol>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
+<canvas id="sea" aria-hidden="true"></canvas>
+<div class="sea-fb" aria-hidden="true"></div>
+
+<header class="hud hud--compact">
+<a class="hud__back" href="index.html#projects"><span class="tri tri--l"></span><span>Projects</span></a>
+<div class="hud__cal" aria-hidden="true"><span class="hud__date" data-hud="date"></span><span class="hud__dow" data-hud="dow"></span><span class="hud__slot" data-hud="slot"></span></div>
+<button class="hud__moon" type="button" aria-pressed="false" aria-label="Moon. Toggle 00:00 mode"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle class="hud__moon-base" r="20"/><path class="hud__moon-lit" d=""/></svg><span class="hud__moon-t" aria-hidden="true">00:00</span></button>
+<p class="hud__status">Open to work<span class="hud__rr"> · Relocation ready</span></p>
+<ul class="hud__icons">
+<li><a class="btn btn--icon has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener" aria-label="Telegram @MATb_CONTROL (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="mailto:kartakcvc@gmail.com" aria-label="Email kartakcvc@gmail.com"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="https://github.com/matbcontrol" target="_blank" rel="noopener" aria-label="GitHub matbcontrol (opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-gh"/></svg></a></li>
+<li><a class="btn btn--icon has-shape" href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in new tab)"><span class="shape"></span><svg class="ico" aria-hidden="true"><use href="#i-cv"/></svg></a></li>
+</ul>
+</header>
+
+<main id="main" tabindex="-1">
+<section id="game-jams" class="sec sec--pp" data-mode="blue" data-frame="1" data-label="Game jams" aria-labelledby="h-pp">
+<div class="sec__deco" aria-hidden="true"><span class="sh__wm">Jams</span></div>
+<div class="sec__in">
+<nav class="pp__crumb" aria-label="Breadcrumb"><a href="index.html">Kartak</a><span aria-hidden="true">/</span><a href="index.html#projects">Projects</a><span aria-hidden="true">/</span><span aria-current="page">Game jams</span></nav>
+<header class="sh"><h1 id="h-pp">Game jams</h1><p class="sh__tip">Jam entries and prototypes<span class="rule"></span></p></header>
+
+<article class="pp" id="dielevator" aria-labelledby="j-diel">
+<figure class="pp__media"><img src="assets/work/jam-dielevator-640.jpg" srcset="assets/work/jam-dielevator-640.jpg 640w, assets/work/jam-dielevator-1280.jpg 1280w" sizes="(max-width:1023px) calc(100vw - 32px), 720px" width="1280" height="720" decoding="async" alt="Dielevator! pixel-art platformer: the player on a platform between two industrial shafts, a generator below"><figcaption class="pp__cap">Dielevator! in the browser</figcaption></figure>
+<div class="pp__card has-shape">
+<span class="shape"></span>
+<p class="pcard__status">Playable · itch.io</p>
+<h2 id="j-diel">Dielevator!</h2>
+<ul class="pcard__tags"><li>Game jam</li><li>Programmer</li><li>HTML5</li></ul>
+<p class="pp__lead">A browser platformer with tower-defence elements: you stay on the platform and keep the generator alive. A team of four built it in 72 hours for Indie Varvar's Jam #5 in September 2023.</p>
+<dl class="pp__facts">
+<div><dt>Jam</dt><dd>Indie Varvar's Jam #5</dd></div>
+<div><dt>Team</dt><dd>Four people, 72 hours</dd></div>
+<div><dt>My role</dt><dd>Programmer, credited on itch.io as ALEPACHO</dd></div>
+<div><dt>Result</dt><dd>#6 of 63 entries in Graphics</dd></div>
+</dl>
+<div class="pcard__cta">
+<a class="btn btn--cmd has-shape" href="https://alepacho.itch.io/dielevatorfixed" target="_blank" rel="noopener"><span class="shape"></span><span>Play on itch.io</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+<a class="btn btn--line has-shape" href="https://itch.io/jam/indie-varvars-jam-5/rate/2267607" target="_blank" rel="noopener"><span class="shape"></span><span>Jam results</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a>
+</div>
+</div>
+</article>
+
+<article class="pp pp--flip" id="victim" aria-labelledby="j-victim">
+<figure class="pp__media"><img src="assets/work/jam-victim-640.jpg" srcset="assets/work/jam-victim-640.jpg 640w, assets/work/jam-victim-1280.jpg 1280w" sizes="(max-width:1023px) calc(100vw - 32px), 720px" width="1280" height="650" loading="lazy" decoding="async" alt="The Path of the Victim: pixel-art night scene under a full moon, a girl faces a masked hooded figure, dialogue box below"><figcaption class="pp__cap">A dialogue scene under the full moon</figcaption></figure>
+<div class="pp__card has-shape">
+<span class="shape"></span>
+<p class="pcard__status">Halloween Game Jam 2023</p>
+<h2 id="j-victim">The Path of the Victim</h2>
+<ul class="pcard__tags"><li>Game jam</li><li>Programmer</li><li>2D</li></ul>
+<p class="pp__lead">A 2D pixel-art horror story with dialogue scenes, made for Halloween Game Jam 2023. The screenshot shows a girl facing a masked hooded figure at night.</p>
+<dl class="pp__facts">
+<div><dt>Jam</dt><dd>Halloween Game Jam 2023</dd></div>
+<div><dt>My role</dt><dd>Programmer</dd></div>
+</dl>
+</div>
+</article>
+
+<article class="pp" id="solo" aria-labelledby="j-solo">
+<div class="pp__media"><div class="pcard__type pp__type"><p class="pcard__big"><span class="suf">Solo</span> · <span class="num">12</span> <span class="suf">h</span></p></div></div>
+<div class="pp__card has-shape">
+<span class="shape"></span>
+<p class="pcard__status">Game jams</p>
+<h2 id="j-solo">A prototype in 12 hours</h2>
+<ul class="pcard__tags"><li>Game jams</li><li>Prototyping</li><li>Solo</li></ul>
+<p class="pp__lead">For one jam I designed and built a complete prototype on my own within 12 hours. I have more playable jam demos besides the ones on this page, and I can send a selection.</p>
+<dl class="pp__facts">
+<div><dt>Time</dt><dd>12 hours</dd></div>
+<div><dt>Team</dt><dd>Solo</dd></div>
+<div><dt>Builds</dt><dd>A selection on request</dd></div>
+</dl>
+<div class="pcard__cta"><a class="btn btn--cmd has-shape" href="mailto:kartakcvc@gmail.com?subject=Jam%20prototypes%3A%20selection"><span class="shape"></span><span>Ask for the selection</span></a></div>
+</div>
+</article>
+
+<aside class="fin pp__ask" aria-labelledby="h-ask">
+<div class="fin__sig">
+<p class="micro fin__eyebrow">More jam demos<span class="rule"></span></p>
+<h2 id="h-ask"><span class="fin__l1">Want to see more?</span> <span class="fin__l2">Ask me.</span></h2>
+<p class="fin__body">I can send a selection of my other jam demos. Telegram is the fastest way to reach me, and email works too.</p>
+</div>
+<ul class="fin__cmds">
+<li class="fcmd fcmd--main is-sel" style="--i:1;--r:-5deg"><a class="fcmd__a has-shape" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Telegram</span> <span class="fcmd__d">@MATb_CONTROL</span><span class="vh"> (opens in new tab)</span></a></li>
+<li class="fcmd" style="--i:2;--r:-3deg"><a class="fcmd__a has-shape" href="mailto:kartakcvc@gmail.com?subject=Jam%20builds"><span class="shape"></span><span class="fcmd__cur"></span><span class="fcmd__t">Email</span> <span class="fcmd__d">kartakcvc@gmail.com</span></a><button class="btn--copy" type="button" data-copy="kartakcvc@gmail.com" data-announce="Email copied" hidden>Copy</button></li>
+</ul>
+</aside>
+
+<p class="pp__back"><a class="btn btn--line has-shape" href="index.html#projects"><span class="shape"></span><span class="tri tri--l"></span><span>Back to projects</span></a></p>
+</div>
+</section>
+</main>
+
+<footer class="foot">
+<div class="foot__in">
+<p class="micro foot__eod">End of day<span class="rule"></span> <span class="foot__date" data-hud="date"></span></p>
+<a class="btn btn--line has-shape foot__resume" href="index.html"><span class="shape"></span><span class="tri tri--l"></span><span>Main page</span></a>
+<p class="foot__copy">© <span data-year>2026</span> Aleksandr Kartak · Unity Developer &amp; Technical Artist</p>
+<ul class="foot__links"><li><a href="mailto:kartakcvc@gmail.com">Email</a></li><li><a href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener">Telegram<span class="vh"> (opens in new tab)</span></a></li><li><a href="https://github.com/matbcontrol" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in new tab)</span></a></li><li><a href="https://www.reddit.com/user/Murky-Goose-1291/" target="_blank" rel="noopener">Reddit<span class="vh"> (opens in new tab)</span></a></li><li><a href="assets/cv/Aleksandr_Kartak_CV.pdf" target="_blank" rel="noopener">CV (PDF)<span class="vh"> (opens in new tab)</span></a></li></ul>
+<div class="foot__set" hidden>
+<div class="seg" role="group" aria-label="Motion"><span class="micro" aria-hidden="true">Motion</span><button type="button" data-set="motion:auto" aria-pressed="true">Full</button><button type="button" data-set="motion:reduced" aria-pressed="false">Reduced</button></div>
+<div class="seg" role="group" aria-label="Shader"><span class="micro" aria-hidden="true">Shader</span><button type="button" data-set="shader:on" aria-pressed="true">On</button><button type="button" data-set="shader:off" aria-pressed="false">Off</button></div>
+</div>
+<p class="foot__zero" hidden>You're here at 00:00.</p>
+</div>
+</footer>
+
+<nav class="bbar" aria-label="Quick links">
+<a class="bbar__b bbar__b--sel" href="https://t.me/MATb_CONTROL" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span><span class="vh"> (opens in new tab)</span></a>
+<a class="bbar__b" href="mailto:kartakcvc@gmail.com?subject=Jam%20builds"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span></a>
+<a class="bbar__b" href="index.html#projects"><span class="tri tri--l" aria-hidden="true"></span><span>Projects</span></a>
+</nav>
+
+<div class="sr-live vh" aria-live="polite"></div>
+</body>
+</html>
