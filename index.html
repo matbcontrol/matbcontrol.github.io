@@ -268,7 +268,28 @@
 <svg class="seam seam--diag" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,96 1440,0 1440,96"/></svg>
 <div class="sec__deco" aria-hidden="true"><span class="sh__idx">3</span><span class="sh__wm rv" data-rv="wm">00:00</span></div>
 <div class="sec__in">
-<header class="sh"><h2 id="h-tech" class="rv" data-rv="h2" tabindex="-1">Tech art</h2><p class="sh__tip">How it's built — WindCore.hlsl · URP shaders · this page's background<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+<header class="sh"><h2 id="h-tech" class="rv" data-rv="h2" tabindex="-1">Tech art</h2><p class="sh__tip">How it's built: Infinite Garden · WindCore.hlsl · URP shaders · this page's background<span class="rule"></span></p><a class="sh__menu" href="#menu" data-open="pause" aria-haspopup="dialog"><span class="tri tri--l"></span>Menu</a></header>
+
+<article class="bd bd--ig bd--flip rv" data-rv="panel" id="infinite-garden" aria-labelledby="bd-ig">
+<figure class="bd__media"><video src="assets/video/infinite-garden.mp4" poster="assets/video/infinite-garden-poster.jpg" width="1280" height="720" autoplay muted loop playsinline preload="metadata" aria-label="Infinite Garden: the camera falls endlessly through pastel block architecture with thin dark outlines"></video><script>(function(){var v=document.currentScript.parentNode.querySelector('video'),r=document.documentElement;if(matchMedia('(prefers-reduced-motion: reduce)').matches||r.dataset.motion==='reduced'){v.removeAttribute('autoplay');v.pause();}})();</script></figure>
+<div class="bd__body">
+<p class="micro bd__tag">// Unity 6 URP · Render Graph · HLSL · open source</p>
+<h3 id="bd-ig">Infinite Garden: a Manifold Garden-style endless world</h3>
+<p>One 48 m tile of cubes is drawn as a 3D grid of <b>instanced copies</b> around the camera. The fog end distance is the view radius, so the fog decides how many copies get drawn, and the camera wraps around the tile to fall forever. The outlines follow Arthur Brussee's SIGGRAPH 2020 talk: a <b>Render Graph</b> pass finds each pixel's distance to the nearest depth or normal edge and draws an anti-aliased line from it, with no MSAA or TAA.</p>
+<figure class="code"><figcaption class="code__tag">IG_Edges.shader <span class="micro">HLSL</span></figcaption>
+<pre tabindex="0" aria-label="IG_Edges.shader excerpt"><code id="code-ig"><span class="tc">// the edge lies halfway between two pixels</span>
+<span class="tk">float</span> d = <span class="tn">0.5</span> * <span class="tk">length</span>(<span class="tk">float2</span>(kTaps[k]));
+<span class="tk">if</span> (isEdge &amp;&amp; d &lt; distanceToEdge)
+    distanceToEdge = d;
+
+<span class="tc">// anti-aliased iso-line of the distance field</span>
+<span class="tk">float</span> coverage = <span class="tk">saturate</span>(<span class="tn">0.5</span> * _EdgeWidth + <span class="tn">0.5</span> - distanceToEdge);</code></pre>
+<button class="btn--copy" type="button" data-copy-target="#code-ig" data-announce="Code copied" hidden>Copy</button></figure>
+<ul class="chips chips--night"><li>Render Graph</li><li>SDF outlines</li><li>GPU instancing</li><li>Frustum culling</li><li>FrameTimingManager</li><li>Benchmark CSV</li></ul>
+<p class="bd__res slab">3.6 ms GPU at 1080p on a laptop GTX 1650 Ti · 78 fps on Intel UHD with the low-end preset</p>
+<div class="bd__cta"><a class="btn btn--line has-shape" href="https://github.com/matbcontrol/InfiniteGarden" target="_blank" rel="noopener"><span class="shape"></span><span>Code on GitHub</span><span aria-hidden="true">↗</span><span class="vh"> (opens in new tab)</span></a></div>
+</div>
+</article>
 
 <article class="bd bd--wind rv" data-rv="panel" aria-labelledby="bd-wind">
 <figure class="bd__media"><img src="assets/work/image3-640.jpg" srcset="assets/work/image3-640.jpg 640w, assets/work/image3-1280.jpg 1280w" sizes="(max-width:599px) calc(100vw - 32px), (max-width:1239px) 50vw, 620px" width="1280" height="720" loading="lazy" decoding="async" alt="Stylized top-down RPG with grass and vegetation"></figure>

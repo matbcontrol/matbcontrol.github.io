@@ -426,6 +426,8 @@ main{display:block}
 .bd:last-child{margin-bottom:0}
 .bd__media{grid-column:1/7;margin:12px 0 0;border:2px solid var(--night-neon);box-shadow:10px 12px 0 var(--ink);background:var(--night-bg)}
 .bd__media img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.bd__media video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.bd__cta{display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:22px}
 .bd__body{grid-column:7/13;position:relative;isolation:isolate;padding:28px 34px 32px 32px;min-width:0}
 .bd__body::before,.bd__body::after,.bench::before,.bench::after{content:"";position:absolute;inset:0;clip-path:polygon(var(--cut-m) 0,100% 0,calc(100% - var(--cut-m)) 100%,0 100%)}
 .bd__body::before,.bench::before{z-index:-1;background:rgb(21 25 3 / .92)}
