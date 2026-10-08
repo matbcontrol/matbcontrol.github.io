@@ -338,6 +338,8 @@ main{display:block}
 .vid{position:relative;margin:0}
 .vid--main{grid-column:1/9}
 .vid--demo{grid-column:9/13;translate:0 96px;rotate:2deg}
+.vid--half{grid-column:span 6;margin-top:110px}
+.vid--half+.vid--half{rotate:-1deg}
 .vid__frame{position:relative;isolation:isolate;border:3px solid var(--white);background:var(--ink);box-shadow:10px 12px 0 var(--ink)}
 .vid__diamond{position:absolute;z-index:-1;left:50%;top:50%;height:84.85%;aspect-ratio:1;translate:-50% -50%;rotate:45deg;border:2px solid var(--white)}
 .yt{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
@@ -833,6 +835,7 @@ html:has(#pause[open]) #top :is(.cmds--hero,.tip,.prompts,.seatag){visibility:hi
   .pp__media--phone{width:min(100%,260px)}
   .pp__block{padding:24px 22px 26px}
   .vid--demo{translate:none;rotate:1deg;margin-top:40px}
+  .vid--half{margin-top:40px}
   .reel{padding-bottom:0}
   .pcard--reday{margin-top:0}
   .pgrid{gap:44px}
