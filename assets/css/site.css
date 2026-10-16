@@ -445,6 +445,14 @@ main{display:block}
 .bd__res{margin-top:22px;padding:12px 18px;font:italic 600 1rem/1.4 var(--f-body);--slab-sh:var(--night-band)}
 .bd__off{margin-top:18px;font:italic 600 .9375rem/1.4 var(--f-body);color:var(--night-neon)}
 html[data-sea="gl"] .bd__off{display:none}
+/* REMNANT: square clip with the 4-view sheet under it, credits at the end of the body */
+.bd--square{grid-template-rows:auto 1fr}
+.bd--square .bd__media{grid-row:1}
+.bd--square .bd__body{grid-row:1/3}
+.bd--square .bd__media video{aspect-ratio:1/1}
+.bd__still{grid-column:1/7;grid-row:2;margin:12px 0 0;border:2px solid var(--night-band);background:var(--night-bg);box-shadow:8px 10px 0 var(--ink)}
+.bd__still img{display:block;width:100%;height:auto}
+.bd .bd__body>p.bd__credit{margin-top:18px;font-size:.8125rem;line-height:1.5;color:rgb(224 254 157 / .7);overflow-wrap:break-word}
 /* GUIDES: write-ups on r/Unity3D, reuses the project card */
 .pgrid--guides{margin-top:12px}
 .pgrid--guides .pcard{grid-column:span 6}
@@ -840,6 +848,8 @@ html:has(#pause[open]) #top :is(.cmds--hero,.tip,.prompts,.seatag){visibility:hi
   .pcard--reday{margin-top:0}
   .pgrid{gap:44px}
   .bd__media{margin-top:0}
+  .bd--square{grid-template-rows:none}
+  .bd--square .bd__media,.bd__still{max-width:560px}
   .about__talk{padding-top:20px}
   .edu__disc{display:none}
   .edu__langs{isolation:isolate;margin-top:24px;padding:96px 8px 84px}
